@@ -89,7 +89,7 @@ export default function ComingSoonPage() {
               </p>
 
               <p className="mt-4 font-serif text-3xl leading-tight text-[#211f1b]">
-                Your care home base for the parts no one plans for.
+                For every part of becoming a mom.
               </p>
 
               <div className="mt-6 space-y-3">
