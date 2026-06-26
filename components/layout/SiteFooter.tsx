@@ -67,11 +67,11 @@ const socialLinks: Array<{
   href: string
   Icon: IconType
 }> = [
-  { label: 'TikTok', href: '#', Icon: FaTiktok },
-  { label: 'Instagram', href: '#', Icon: FaInstagram },
-  { label: 'Pinterest', href: '#', Icon: FaPinterestP },
-  { label: 'Facebook', href: '#', Icon: FaFacebookF },
-  { label: 'X', href: '#', Icon: FaXTwitter },
+  { label: 'TikTok', href: siteConfig.social.tiktok, Icon: FaTiktok },
+  { label: 'Instagram', href: siteConfig.social.instagram, Icon: FaInstagram },
+  { label: 'Pinterest', href: siteConfig.social.pinterest, Icon: FaPinterestP },
+  { label: 'Facebook', href: siteConfig.social.facebook, Icon: FaFacebookF },
+  { label: 'X', href: siteConfig.social.x, Icon: FaXTwitter },
 ]
 
 export default function SiteFooter() {
@@ -144,21 +144,22 @@ export default function SiteFooter() {
 
               <div className="mt-5 flex flex-wrap items-center gap-3 sm:gap-4 lg:gap-5">
                 {socialLinks.map(({ label, href, Icon }) => (
-                  <Link
+                  <a
                     key={label}
                     href={href}
                     aria-label={label}
                     title={label}
+                    target="_blank"
+                    rel="noreferrer"
                     className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#fbf7ef]/85 text-[#4f5d3d] shadow-[0_10px_25px_rgba(61,50,38,0.045)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#211f1b]"
                   >
                     <Icon className="h-4 w-4 transition group-hover:scale-105" />
-                  </Link>
+                  </a>
                 ))}
               </div>
 
               <p className="mt-4 text-xs leading-5 text-[#6d6459]">
-                Social links are ready for launch handles when you connect
-                them.
+                Follow along at @willamomco.
               </p>
             </div>
           </div>
@@ -220,6 +221,20 @@ function FooterSectionBlock({ section }: { section: FooterSection }) {
 }
 
 function FooterLinkItem({ link }: { link: FooterLink }) {
+  const isExternalLink =
+    link.href.startsWith('http') || link.href.startsWith('mailto:')
+
+  if (isExternalLink) {
+    return (
+      <a
+        href={link.href}
+        className="block text-sm text-[#5f574d] transition hover:text-[#211f1b]"
+      >
+        {link.label}
+      </a>
+    )
+  }
+
   return (
     <Link
       href={link.href}

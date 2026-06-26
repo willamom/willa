@@ -1,4 +1,12 @@
 import Link from 'next/link'
+import type { IconType } from 'react-icons'
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaPinterestP,
+  FaTiktok,
+  FaXTwitter,
+} from 'react-icons/fa6'
 
 import { siteConfig } from '@/lib/site'
 
@@ -19,8 +27,21 @@ const previewItems = [
   },
   {
     title: 'Save',
-    description: 'Collect registry ideas, checklists, and resources all in one place.',
+    description:
+      'Collect registry ideas, checklists, and resources all in one place.',
   },
+]
+
+const socialLinks: Array<{
+  label: string
+  href: string
+  Icon: IconType
+}> = [
+  { label: 'TikTok', href: siteConfig.social.tiktok, Icon: FaTiktok },
+  { label: 'Instagram', href: siteConfig.social.instagram, Icon: FaInstagram },
+  { label: 'Pinterest', href: siteConfig.social.pinterest, Icon: FaPinterestP },
+  { label: 'Facebook', href: siteConfig.social.facebook, Icon: FaFacebookF },
+  { label: 'X', href: siteConfig.social.x, Icon: FaXTwitter },
 ]
 
 export default function ComingSoonPage() {
@@ -37,7 +58,6 @@ export default function ComingSoonPage() {
           >
             willa
           </Link>
-
         </header>
 
         <div className="relative mx-auto grid max-w-7xl gap-10 pt-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:pt-24">
@@ -54,7 +74,8 @@ export default function ComingSoonPage() {
             </h1>
 
             <p className="mt-7 max-w-2xl text-base leading-7 text-[#5f574d] sm:text-lg sm:leading-8">
-              Honest guides, practical checklists, registry ideas, and support for every stage of pregnancy, birth, and postpartum.
+              Honest guides, practical checklists, registry ideas, and support
+              for every stage of pregnancy, birth, and postpartum.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -74,8 +95,8 @@ export default function ComingSoonPage() {
             </div>
 
             <p className="mt-5 max-w-xl text-sm leading-6 text-[#8a8277]">
-              The nursery is only one part of getting ready.
-              Willa is here for the rest.
+              The nursery is only one part of getting ready. Willa is here for
+              the rest.
             </p>
           </div>
 
@@ -112,29 +133,62 @@ export default function ComingSoonPage() {
                 </p>
 
                 <p className="mt-2 text-sm leading-6 text-[#655d52]">
-                  From pregnancy to postpartum, we're with you every step of the way.
+                  From pregnancy to postpartum, we&apos;re with you every step
+                  of the way.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <footer className="relative mx-auto mt-16 flex max-w-7xl flex-col gap-3 border-t border-[#e8ded1] pt-6 text-sm text-[#655d52] sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Willa. All rights reserved.</p>
+        <footer className="relative mx-auto mt-16 max-w-7xl border-t border-[#e8ded1] pt-6 text-sm text-[#655d52]">
+          <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/privacy"
+                className="transition hover:text-[#211f1b]"
+              >
+                Privacy
+              </Link>
 
-          <div className="flex flex-wrap gap-4">
-            <Link href="/privacy" className="transition hover:text-[#211f1b]">
-              Privacy
-            </Link>
-            <Link href="/terms" className="transition hover:text-[#211f1b]">
-              Terms
-            </Link>
-            <Link
-              href="/disclaimer"
-              className="transition hover:text-[#211f1b]"
-            >
-              Disclaimer
-            </Link>
+              <Link href="/terms" className="transition hover:text-[#211f1b]">
+                Terms
+              </Link>
+
+              <Link
+                href="/cookies"
+                className="transition hover:text-[#211f1b]"
+              >
+                Cookies
+              </Link>
+
+              <Link
+                href="/disclaimer"
+                className="transition hover:text-[#211f1b]"
+              >
+                Disclaimer
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              {socialLinks.map(({ label, href, Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  title={label}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex h-9 w-9 items-center justify-center rounded-full bg-white/65 text-[#4f5d3d] shadow-[0_8px_20px_rgba(61,50,38,0.035)] transition hover:-translate-y-0.5 hover:bg-white hover:text-[#211f1b]"
+                >
+                  <Icon className="h-3.5 w-3.5 transition group-hover:scale-105" />
+                </a>
+              ))}
+            </div>
+
+            <p className="text-sm text-[#655d52]">
+              © {new Date().getFullYear()} Willa. All rights reserved.
+            </p>
           </div>
         </footer>
       </section>
