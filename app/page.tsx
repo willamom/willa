@@ -38,9 +38,6 @@ export default function ComingSoonPage() {
             willa
           </Link>
 
-          <span className="rounded-full border border-[#e2d7c8] bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#4f5d3d] shadow-sm">
-            Coming soon
-          </span>
         </header>
 
         <div className="relative mx-auto grid max-w-7xl gap-10 pt-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:pt-24">
