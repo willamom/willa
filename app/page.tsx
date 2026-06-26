@@ -120,7 +120,7 @@ export default function ComingSoonPage() {
         </div>
 
         <footer className="relative mx-auto mt-16 flex max-w-7xl flex-col gap-3 border-t border-[#e8ded1] pt-6 text-sm text-[#655d52] sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Willa. Mom-first care planning.</p>
+          <p>© {new Date().getFullYear()} Willa. All rights reserved.</p>
 
           <div className="flex flex-wrap gap-4">
             <Link href="/privacy" className="transition hover:text-[#211f1b]">
