@@ -111,11 +111,11 @@ export default function ComingSoonPage() {
 
               <div className="mt-6 rounded-2xl border border-[#eadfd4] bg-[#fbf7ef] p-4">
                 <p className="font-serif text-xl leading-snug text-[#211f1b]">
-                  You deserve a plan.
+                  Preparing for motherhood starts here.
                 </p>
 
                 <p className="mt-2 text-sm leading-6 text-[#655d52]">
-                  You do not have to piece it together alone.
+                  From pregnancy to postpartum, we're with you every step of the way.
                 </p>
               </div>
             </div>
