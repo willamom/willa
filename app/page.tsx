@@ -10,16 +10,16 @@ export const metadata = {
 
 const previewItems = [
   {
-    title: 'Pregnancy guides',
-    description: 'Clear, human answers for the questions that show up at 3am.',
+    title: 'Learn',
+    description: 'Practical guides from pregnancy to postpartum.',
   },
   {
-    title: 'Postpartum care plan',
-    description: 'A place to save what you need before and after baby arrives.',
+    title: 'Plan',
+    description: 'Keep track of what matters, from appointments to recovery.',
   },
   {
-    title: 'Mom-first registry ideas',
-    description: 'Recovery, meals, support, feeding help, and care for you too.',
+    title: 'Save',
+    description: 'Collect registry ideas, checklists, and resources all in one place.',
   },
 ]
 
@@ -46,7 +46,7 @@ export default function ComingSoonPage() {
         <div className="relative mx-auto grid max-w-7xl gap-10 pt-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:pt-24">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#39472c] sm:tracking-[0.34em]">
-              Pregnancy, birth & postpartum
+              Pregnancy · Birth · Postpartum
             </p>
 
             <h1 className="mt-6 max-w-4xl font-serif text-5xl leading-[1.03] tracking-tight text-[#211f1b] sm:text-6xl lg:text-[5rem]">
@@ -57,9 +57,7 @@ export default function ComingSoonPage() {
             </h1>
 
             <p className="mt-7 max-w-2xl text-base leading-7 text-[#5f574d] sm:text-lg sm:leading-8">
-              Willa is a mom-first guide and care planning space for pregnancy,
-              birth, postpartum, registry ideas, and the support that usually
-              gets treated like an afterthought.
+              Honest guides, practical checklists, registry ideas, and support for every stage of pregnancy, birth, and postpartum.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -67,20 +65,20 @@ export default function ComingSoonPage() {
                 href={`mailto:${siteConfig.email}?subject=Early access to Willa`}
                 className="rounded-xl bg-[#4f5d3d] px-8 py-4 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-[#414d31]"
               >
-                Join early access
+                Join the waitlist
               </a>
 
               <a
                 href={`mailto:${siteConfig.email}?subject=Willa partnership`}
                 className="rounded-xl border border-[#c8bdae] bg-white/70 px-8 py-4 text-center text-sm font-semibold text-[#211f1b] shadow-sm transition hover:bg-white"
               >
-                Partner with Willa
+                Work with Willa
               </a>
             </div>
 
             <p className="mt-5 max-w-xl text-sm leading-6 text-[#8a8277]">
-              Launching first with practical guides for pregnancy, birth prep,
-              postpartum, and mom-first planning.
+              The nursery is only one part of getting ready.
+              Willa is here for the rest.
             </p>
           </div>
 
@@ -113,7 +111,7 @@ export default function ComingSoonPage() {
 
               <div className="mt-6 rounded-2xl border border-[#eadfd4] bg-[#fbf7ef] p-4">
                 <p className="font-serif text-xl leading-snug text-[#211f1b]">
-                  The fourth trimester deserves a plan.
+                  You deserve a plan.
                 </p>
 
                 <p className="mt-2 text-sm leading-6 text-[#655d52]">
