@@ -8,6 +8,7 @@ import {
   FaXTwitter,
 } from 'react-icons/fa6'
 
+import ComingSoonWaitlist from '@/components/waitlist/ComingSoonWaitlist'
 import { siteConfig } from '@/lib/site'
 
 export const metadata = {
@@ -78,21 +79,7 @@ export default function ComingSoonPage() {
               for every stage of pregnancy, birth, and postpartum.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={`mailto:${siteConfig.email}?subject=Early access to Willa`}
-                className="rounded-xl bg-[#4f5d3d] px-8 py-4 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-[#414d31]"
-              >
-                Join the waitlist
-              </a>
-
-              <a
-                href={`mailto:${siteConfig.email}?subject=Willa partnership`}
-                className="rounded-xl border border-[#c8bdae] bg-white/70 px-8 py-4 text-center text-sm font-semibold text-[#211f1b] shadow-sm transition hover:bg-white"
-              >
-                Work with Willa
-              </a>
-            </div>
+            <ComingSoonWaitlist />
 
             <p className="mt-5 max-w-xl text-sm leading-6 text-[#8a8277]">
               The nursery is only one part of getting ready. Willa is here for
