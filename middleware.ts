@@ -15,6 +15,7 @@ const publicPrefixes = [
   '/_next',
   '/images',
   '/icons',
+  '/admin',
 ]
 
 const publicFiles = [

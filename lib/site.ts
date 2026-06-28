@@ -8,7 +8,7 @@ export const siteConfig = {
   social: {
     instagram: 'https://www.instagram.com/willamomco',
     tiktok: 'https://www.tiktok.com/@willamomco',
-    pinterest: 'https://www.pinterest.com/willamomcom',
+    pinterest: 'https://www.pinterest.com/willamomco',
     facebook: 'https://www.facebook.com/willamomco',
     threads: 'https://www.threads.net/@willamomco',
     x: 'https://x.com/willamomco',

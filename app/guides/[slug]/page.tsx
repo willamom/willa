@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -33,19 +34,32 @@ export async function generateMetadata({
     }
   }
 
+  const title = guide.seoTitle ?? `${guide.title} | ${siteConfig.name}`
+  const description = guide.seoDescription ?? guide.description
+  const imageUrl = guide.image ? `${siteConfig.url}${guide.image.src}` : null
+
   return {
-    title: `${guide.title} | ${siteConfig.name}`,
-    description: guide.description,
+    title,
+    description,
     openGraph: {
-      title: `${guide.title} | ${siteConfig.name}`,
-      description: guide.description,
+      title,
+      description,
       type: 'article',
       url: `${siteConfig.url}/guides/${guide.slug}`,
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              alt: guide.image?.alt,
+            },
+          ]
+        : undefined,
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${guide.title} | ${siteConfig.name}`,
-      description: guide.description,
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
     },
   }
 }
@@ -119,6 +133,29 @@ export default async function GuidePage({ params }: GuidePageProps) {
               </div>
             </header>
 
+            {guide.image ? (
+              <div className="mt-8 overflow-hidden rounded-[2rem] bg-[#f2ece2] shadow-[0_22px_70px_rgba(61,50,38,0.08)]">
+                <Image
+                  src={guide.image.src}
+                  alt={guide.image.alt}
+                  width={1600}
+                  height={900}
+                  priority
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            ) : null}
+
+            {guide.intro && guide.intro.length > 0 ? (
+              <section className="mt-8 rounded-[2rem] bg-white p-6 shadow-[0_18px_55px_rgba(61,50,38,0.06)] sm:p-8">
+                <div className="space-y-5 text-base leading-8 text-[#5f574d]">
+                  {guide.intro.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             <div className="mt-8 space-y-6">
               {guide.sections.map((section, index) => (
                 <section
@@ -133,12 +170,46 @@ export default async function GuidePage({ params }: GuidePageProps) {
                     {section.heading}
                   </h2>
 
-                  <p className="mt-4 text-base leading-8 text-[#5f574d]">
-                    {section.body}
-                  </p>
+                  <GuideBody body={section.body} />
+
+                  {section.bullets && section.bullets.length > 0 ? (
+                    <ul className="mt-5 space-y-3">
+                      {section.bullets.map((bullet) => (
+                        <li
+                          key={bullet}
+                          className="flex gap-3 text-base leading-7 text-[#5f574d]"
+                        >
+                          <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f5ded5] text-xs font-bold text-[#a45f51]">
+                            ✓
+                          </span>
+
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+
+                  {section.related ? (
+                    <div className="mt-6 rounded-2xl bg-[#f8f3eb] px-5 py-4 text-sm leading-6 text-[#655d52]">
+                      <span className="font-semibold text-[#211f1b]">
+                        Related:
+                      </span>{' '}
+                      {section.related}
+                    </div>
+                  ) : null}
                 </section>
               ))}
             </div>
+
+            {guide.closing && guide.closing.length > 0 ? (
+              <section className="mt-8 rounded-[2rem] bg-[#f2ece2] p-6 shadow-[0_18px_55px_rgba(61,50,38,0.05)] sm:p-8">
+                <div className="space-y-5 text-base leading-8 text-[#5f574d]">
+                  {guide.closing.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
             <section className="mt-8 rounded-[2rem] border border-[#e2d7c8] bg-white/70 p-6 shadow-[0_14px_45px_rgba(61,50,38,0.045)]">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#39472c]">
@@ -219,5 +290,17 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
       <SiteFooter />
     </>
+  )
+}
+
+function GuideBody({ body }: { body: string | string[] }) {
+  const paragraphs = Array.isArray(body) ? body : [body]
+
+  return (
+    <div className="mt-4 space-y-5 text-base leading-8 text-[#5f574d]">
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
+    </div>
   )
 }

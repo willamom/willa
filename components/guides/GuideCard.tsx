@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import type { Guide } from '@/types/guides'
@@ -12,6 +13,18 @@ export default function GuideCard({ guide }: GuideCardProps) {
       href={`/guides/${guide.slug}`}
       className="group flex h-full min-h-[18rem] flex-col rounded-[2rem] bg-white p-6 shadow-[0_18px_55px_rgba(61,50,38,0.07)] transition hover:-translate-y-1 hover:bg-[#fffdf9] hover:shadow-[0_22px_65px_rgba(61,50,38,0.09)]"
     >
+      {guide.image ? (
+        <div className="mb-5 overflow-hidden rounded-2xl bg-[#f2ece2]">
+          <Image
+            src={guide.image.src}
+            alt={guide.image.alt}
+            width={800}
+            height={500}
+            className="h-44 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          />
+        </div>
+      ) : null}
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <span className="rounded-full bg-[#f5ded5] px-3 py-1 text-xs font-semibold text-[#a45f51]">
           {guide.category}
