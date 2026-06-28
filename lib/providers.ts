@@ -26,6 +26,10 @@ type ProviderRow = {
 
   is_featured: boolean
   is_verified: boolean
+  is_claimed: boolean
+  claimed_at: string | null
+  claimed_by_email: string | null
+  claimed_by_name: string | null
 }
 
 const validProviderCategories = new Set<ProviderCategory>([
@@ -82,7 +86,11 @@ function toWillaProvider(row: ProviderRow): WillaProvider {
 
     isFeatured: row.is_featured,
     isVerified: row.is_verified,
-  }
+    isClaimed: row.is_claimed,
+    claimedAt: row.claimed_at ?? undefined,
+    claimedByEmail: row.claimed_by_email ?? undefined,
+    claimedByName: row.claimed_by_name ?? undefined,
+ }
 }
 
 export async function getPublishedProviders(): Promise<WillaProvider[]> {
@@ -110,7 +118,11 @@ export async function getPublishedProviders(): Promise<WillaProvider[]> {
       phone,
       image_url,
       is_featured,
-      is_verified
+      is_verified,
+      is_claimed,
+      claimed_at,
+      claimed_by_email,
+      claimed_by_name
     `
     )
     .eq('status', 'published')
@@ -153,7 +165,11 @@ export async function getProviderBySlug(
       phone,
       image_url,
       is_featured,
-      is_verified
+      is_verified,
+      is_claimed,
+      claimed_at,
+      claimed_by_email,
+      claimed_by_name
     `
     )
     .eq('status', 'published')

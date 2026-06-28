@@ -11,6 +11,7 @@ import {
   MapPin,
   Phone,
   Search,
+  ShieldCheck,
   Star,
   X,
 } from 'lucide-react'
@@ -451,6 +452,13 @@ function ProviderListCard({
           </span>
         ) : null}
 
+        {provider.isClaimed ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#eef0e6] px-2.5 py-1 text-[0.68rem] font-semibold text-[#4f5d3d]">
+            <ShieldCheck className="h-3 w-3" strokeWidth={2} />
+            Claimed
+          </span>
+        ) : null}
+
         {provider.isFeatured ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-[#fff2dc] px-2.5 py-1 text-[0.68rem] font-semibold text-[#a45f51]">
             <Star className="h-3 w-3 fill-current" strokeWidth={2} />
@@ -525,6 +533,13 @@ function ProviderDetailPanel({
           <span className="inline-flex items-center gap-1 rounded-full bg-[#eef0e6] px-2.5 py-1 text-[0.68rem] font-semibold text-[#4f5d3d]">
             <BadgeCheck className="h-3 w-3" strokeWidth={2} />
             Verified
+          </span>
+        ) : null}
+
+        {provider.isClaimed ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-[#eef0e6] px-2.5 py-1 text-[0.68rem] font-semibold text-[#4f5d3d]">
+            <ShieldCheck className="h-3 w-3" strokeWidth={2} />
+            Claimed
           </span>
         ) : null}
 
@@ -639,19 +654,25 @@ function ProviderDetailPanel({
           Is this your profile?
         </p>
 
-        <p className="mt-2 text-sm leading-6 text-[#655d52]">
-          Providers will soon be able to claim and complete their Willa
-          profiles.
-        </p>
+        {provider.isClaimed ? (
+          <p className="mt-2 text-sm leading-6 text-[#655d52]">
+            This profile has been claimed. If something needs updating, contact
+            Willa and we’ll help review it.
+          </p>
+        ) : (
+          <>
+            <p className="mt-2 text-sm leading-6 text-[#655d52]">
+              Providers can claim and complete their Willa profiles.
+            </p>
 
-        <a
-          href={`mailto:hello@willamom.com?subject=Claim provider profile: ${encodeURIComponent(
-            provider.name
-          )}`}
-          className="mt-3 inline-flex text-sm font-semibold text-[#4f5d3d] transition hover:text-[#211f1b]"
-        >
-          Claim this profile →
-        </a>
+            <Link
+              href={`/providers/claim?provider=${provider.slug}`}
+              className="mt-3 inline-flex text-sm font-semibold text-[#4f5d3d] transition hover:text-[#211f1b]"
+            >
+              Claim this profile →
+            </Link>
+          </>
+        )}
       </div>
     </div>
   )

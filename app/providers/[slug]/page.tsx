@@ -14,10 +14,7 @@ import SiteHeader from '@/components/layout/SiteHeader'
 import ProviderProfileInfoCard from '@/components/providers/profile/ProviderProfileInfoCard'
 import ProviderProfileMiniMap from '@/components/providers/profile/ProviderProfileMiniMap'
 import { getProviderCategoryConfig } from '@/data/providers/categories'
-import {
-  getProviderBySlug,
-  getPublishedProviders,
-} from '@/lib/providers'
+import { getProviderBySlug, getPublishedProviders } from '@/lib/providers'
 import { siteConfig } from '@/lib/site'
 import type { WillaProvider } from '@/types/providers'
 
@@ -35,6 +32,12 @@ function getProviderImageUrl(provider: WillaProvider) {
   return provider.image.startsWith('http')
     ? provider.image
     : `${siteConfig.url}${provider.image}`
+}
+
+function getSafeBackgroundImage(imageUrl: string) {
+  const cleanImageUrl = imageUrl.replace(/"/g, '\\"')
+
+  return `url("${cleanImageUrl}")`
 }
 
 function getLocationLabel(provider: WillaProvider) {
@@ -56,6 +59,18 @@ function getFullAddress(provider: WillaProvider) {
   ]
     .filter(Boolean)
     .join(', ')
+}
+
+function getInstagramUrl(instagram?: string) {
+  if (!instagram) {
+    return undefined
+  }
+
+  if (instagram.startsWith('http')) {
+    return instagram
+  }
+
+  return `https://instagram.com/${instagram.replace('@', '')}`
 }
 
 function getNearbyProviders(
@@ -139,6 +154,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
   const imageUrl = getProviderImageUrl(provider)
   const locationLabel = getLocationLabel(provider)
   const fullAddress = getFullAddress(provider)
+  const instagramUrl = getInstagramUrl(provider.instagram)
 
   const schema = {
     '@context': 'https://schema.org',
@@ -157,7 +173,8 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
         }
       : undefined,
     geo:
-      provider.location.lat && provider.location.lng
+      typeof provider.location.lat === 'number' &&
+      typeof provider.location.lng === 'number'
         ? {
             '@type': 'GeoCoordinates',
             latitude: provider.location.lat,
@@ -166,7 +183,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
         : undefined,
     telephone: provider.phone,
     email: provider.email,
-    sameAs: [provider.website, provider.instagram].filter(Boolean),
+    sameAs: [provider.website, instagramUrl].filter(Boolean),
   }
 
   return (
@@ -248,10 +265,9 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
                     </h2>
 
                     <p className="mt-3 text-sm leading-6 text-[#655d52]">
-                      Willa provider profiles are part of our early directory
-                      for pregnancy, birth, postpartum, and motherhood support.
-                      Details may be updated as providers claim or complete
-                      their profiles.
+                      {provider.isClaimed
+                        ? 'This provider profile has been claimed. Willa still reviews updates so the directory stays useful, clear, and trustworthy.'
+                        : 'Willa provider profiles are part of our early directory for pregnancy, birth, postpartum, and motherhood support. Details may be updated as providers claim or complete their profiles.'}
                     </p>
                   </div>
                 </div>
@@ -298,7 +314,7 @@ function ProviderHero({
           <div
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url(${imageUrl})`,
+              backgroundImage: getSafeBackgroundImage(imageUrl),
             }}
           />
         ) : (
@@ -328,6 +344,13 @@ function ProviderHero({
               <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
                 <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
                 Verified
+              </span>
+            ) : null}
+
+            {provider.isClaimed ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#4f5d3d] backdrop-blur-md">
+                <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                Claimed profile
               </span>
             ) : null}
 
@@ -388,23 +411,36 @@ function ClaimProviderCard({ provider }: { provider: WillaProvider }) {
         Is this your profile?
       </p>
 
-      <h2 className="mt-3 font-serif text-2xl text-[#211f1b]">
-        Claim and complete it
-      </h2>
+      {provider.isClaimed ? (
+        <>
+          <h2 className="mt-3 font-serif text-2xl text-[#211f1b]">
+            Claimed profile
+          </h2>
 
-      <p className="mt-3 text-sm leading-6 text-[#655d52]">
-        Providers will soon be able to claim their Willa profiles, update
-        details, add photos, and share more about their services.
-      </p>
+          <p className="mt-3 text-sm leading-6 text-[#655d52]">
+            This profile has been claimed. If something needs updating, contact
+            Willa and we’ll help review it.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2 className="mt-3 font-serif text-2xl text-[#211f1b]">
+            Claim and complete it
+          </h2>
 
-      <a
-        href={`mailto:${siteConfig.email}?subject=Claim provider profile: ${encodeURIComponent(
-          provider.name
-        )}`}
-        className="mt-4 inline-flex rounded-full bg-[#4f5d3d] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#414d31]"
-      >
-        Claim this profile
-      </a>
+          <p className="mt-3 text-sm leading-6 text-[#655d52]">
+            Providers can claim their Willa profiles, update details, add
+            photos, and share more about their services.
+          </p>
+
+          <Link
+            href={`/providers/claim?provider=${provider.slug}`}
+            className="mt-4 inline-flex rounded-full bg-[#4f5d3d] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#414d31]"
+          >
+            Claim this profile
+          </Link>
+        </>
+      )}
     </section>
   )
 }

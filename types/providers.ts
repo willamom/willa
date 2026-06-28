@@ -42,4 +42,9 @@ export type WillaProvider = {
   image?: string
   isFeatured?: boolean
   isVerified?: boolean
+
+  isClaimed?: boolean
+  claimedAt?: string
+  claimedByEmail?: string
+  claimedByName?: string
 }

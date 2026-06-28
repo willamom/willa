@@ -1,3 +1,5 @@
+'use server'
+
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
@@ -44,6 +46,11 @@ type ProviderRow = {
   status: string
   is_featured: boolean
   is_verified: boolean
+
+  is_claimed: boolean
+  claimed_at: string | null
+  claimed_by_email: string | null
+  claimed_by_name: string | null
 
   source: string | null
   notes: string | null
@@ -121,6 +128,11 @@ function toAdminProvider(row: ProviderRow): AdminProvider {
 
     isFeatured: row.is_featured,
     isVerified: row.is_verified,
+
+    isClaimed: row.is_claimed,
+    claimedAt: row.claimed_at ?? undefined,
+    claimedByEmail: row.claimed_by_email ?? undefined,
+    claimedByName: row.claimed_by_name ?? undefined,
 
     status: normalizeStatus(row.status),
     createdAt: row.created_at,
@@ -206,39 +218,43 @@ function getProviderPayload(formData: FormData) {
   }
 }
 
+const providerSelect = `
+  id,
+  created_at,
+  updated_at,
+  slug,
+  name,
+  category,
+  description,
+  specialties,
+  city,
+  state,
+  country,
+  address,
+  lat,
+  lng,
+  website,
+  instagram,
+  email,
+  phone,
+  image_url,
+  status,
+  is_featured,
+  is_verified,
+  is_claimed,
+  claimed_at,
+  claimed_by_email,
+  claimed_by_name,
+  source,
+  notes
+`
+
 export async function getAdminProviders() {
   const supabase = await requireAdmin()
 
   const { data, error } = await supabase
     .from('providers')
-    .select(
-      `
-      id,
-      created_at,
-      updated_at,
-      slug,
-      name,
-      category,
-      description,
-      specialties,
-      city,
-      state,
-      country,
-      address,
-      lat,
-      lng,
-      website,
-      instagram,
-      email,
-      phone,
-      image_url,
-      status,
-      is_featured,
-      is_verified,
-      source,
-      notes
-    `
-    )
+    .select(providerSelect)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -254,34 +270,7 @@ export async function getAdminProviderById(id: string) {
 
   const { data, error } = await supabase
     .from('providers')
-    .select(
-      `
-      id,
-      created_at,
-      updated_at,
-      slug,
-      name,
-      category,
-      description,
-      specialties,
-      city,
-      state,
-      country,
-      address,
-      lat,
-      lng,
-      website,
-      instagram,
-      email,
-      phone,
-      image_url,
-      status,
-      is_featured,
-      is_verified,
-      source,
-      notes
-    `
-    )
+    .select(providerSelect)
     .eq('id', id)
     .single()
 
@@ -293,8 +282,6 @@ export async function getAdminProviderById(id: string) {
 }
 
 export async function createProviderAction(formData: FormData) {
-  'use server'
-
   const supabase = await requireAdmin()
   const payload = getProviderPayload(formData)
 
@@ -304,17 +291,14 @@ export async function createProviderAction(formData: FormData) {
     throw new Error(error.message)
   }
 
+  revalidatePath('/admin')
   revalidatePath('/admin/providers')
   revalidatePath('/providers')
+
   redirect('/admin/providers')
 }
 
-export async function updateProviderAction(
-  id: string,
-  formData: FormData
-) {
-  'use server'
-
+export async function updateProviderAction(id: string, formData: FormData) {
   const supabase = await requireAdmin()
   const payload = getProviderPayload(formData)
 
@@ -327,17 +311,18 @@ export async function updateProviderAction(
     throw new Error(error.message)
   }
 
+  revalidatePath('/admin')
   revalidatePath('/admin/providers')
   revalidatePath('/providers')
+
   redirect('/admin/providers')
 }
 
 export async function updateProviderStatusAction(formData: FormData) {
-  'use server'
-
   const supabase = await requireAdmin()
 
   const id = getText(formData, 'id')
+  const slug = getText(formData, 'slug')
   const status = normalizeStatus(getText(formData, 'status'))
 
   const { error } = await supabase
@@ -349,6 +334,61 @@ export async function updateProviderStatusAction(formData: FormData) {
     throw new Error(error.message)
   }
 
+  revalidatePath('/admin')
   revalidatePath('/admin/providers')
   revalidatePath('/providers')
+
+  if (slug) {
+    revalidatePath(`/providers/${slug}`)
+  }
+}
+
+export async function updateProviderFeaturedAction(formData: FormData) {
+  const supabase = await requireAdmin()
+
+  const id = getText(formData, 'id')
+  const slug = getText(formData, 'slug')
+  const isFeatured = getText(formData, 'is_featured') === 'true'
+
+  const { error } = await supabase
+    .from('providers')
+    .update({ is_featured: isFeatured })
+    .eq('id', id)
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  revalidatePath('/admin')
+  revalidatePath('/admin/providers')
+  revalidatePath('/providers')
+
+  if (slug) {
+    revalidatePath(`/providers/${slug}`)
+  }
+}
+
+export async function updateProviderVerifiedAction(formData: FormData) {
+  const supabase = await requireAdmin()
+
+  const id = getText(formData, 'id')
+  const slug = getText(formData, 'slug')
+  const isVerified = getText(formData, 'is_verified') === 'true'
+
+  const { error } = await supabase
+    .from('providers')
+    .update({ is_verified: isVerified })
+    .eq('id', id)
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  revalidatePath('/admin')
+  revalidatePath('/admin/providers')
+  revalidatePath('/providers')
+
+  if (slug) {
+    revalidatePath(`/providers/${slug}`)
+  }
 }
