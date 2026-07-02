@@ -3,11 +3,14 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
+  AlertTriangle,
   ClipboardCheck,
   ExternalLink,
   LayoutDashboard,
+  Mail,
   MapPinned,
   Plus,
+  ShoppingBag,
 } from 'lucide-react'
 
 const navItems = [
@@ -23,9 +26,24 @@ const navItems = [
     icon: MapPinned,
   },
   {
+    label: 'Quality',
+    href: '/admin/providers/quality',
+    icon: AlertTriangle,
+  },
+  {
     label: 'Claims',
     href: '/admin/provider-claims',
     icon: ClipboardCheck,
+  },
+  {
+    label: 'Inquiries',
+    href: '/admin/provider-inquiries',
+    icon: Mail,
+  },
+  {
+    label: 'Products',
+    href: '/admin/affiliate-products',
+    icon: ShoppingBag,
   },
 ]
 

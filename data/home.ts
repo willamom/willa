@@ -31,33 +31,33 @@ export const searchChips: SearchChip[] = [
 
 export const pillarCards: PillarCard[] = [
   {
-    title: 'Find trusted answers',
-    description: 'Guides for every stage of pregnancy, birth, and postpartum.',
+    title: 'Guides',
+    description: 'Answers when you need them.',
     icon: 'answers',
     iconBg: 'bg-[#f5ded5]',
     iconColor: 'text-[#c96f5c]',
     action: 'Browse guides',
   },
   {
-    title: 'Build your care plan',
+    title: 'Care plan',
     description:
-      'Personalized checklists and timelines for before birth and beyond.',
+      'Turn answers into next steps.',
     icon: 'plan',
     iconBg: 'bg-[#e8ede0]',
     iconColor: 'text-[#596946]',
-    action: 'Create your plan',
+    action: 'Build your plan',
   },
   {
-    title: 'Create your registry',
-    description: 'Add the products, services, and support you actually need.',
+    title: 'Registry',
+    description: 'A registry built for moms, too.',
     icon: 'registry',
     iconBg: 'bg-[#eee7f2]',
     iconColor: 'text-[#7d6694]',
     action: 'Build your registry',
   },
   {
-    title: 'Find your village',
-    description: 'Connect with trusted professionals and helpful people near you.',
+    title: 'Support',
+    description: 'Find local providers you can trust.',
     icon: 'village',
     iconBg: 'bg-[#f3e3cf]',
     iconColor: 'text-[#bd7a3f]',

@@ -11,7 +11,7 @@ export default function GuideCard({ guide }: GuideCardProps) {
   return (
     <Link
       href={`/guides/${guide.slug}`}
-      className="group flex h-full min-h-[18rem] flex-col rounded-[2rem] bg-white p-6 shadow-[0_18px_55px_rgba(61,50,38,0.07)] transition hover:-translate-y-1 hover:bg-[#fffdf9] hover:shadow-[0_22px_65px_rgba(61,50,38,0.09)]"
+      className="group flex h-full min-h-[18rem] min-w-0 flex-col rounded-[1.75rem] bg-white p-5 shadow-[0_18px_55px_rgba(61,50,38,0.07)] transition hover:-translate-y-1 hover:bg-[#fffdf9] hover:shadow-[0_22px_65px_rgba(61,50,38,0.09)] sm:rounded-[2rem] sm:p-6"
     >
       {guide.image ? (
         <div className="mb-5 overflow-hidden rounded-2xl bg-[#f2ece2]">
@@ -36,7 +36,7 @@ export default function GuideCard({ guide }: GuideCardProps) {
       </div>
 
       <div className="flex-1">
-        <h2 className="mt-5 font-serif text-3xl leading-tight text-[#211f1b]">
+        <h2 className="mt-5 break-words font-serif text-2xl leading-tight text-[#211f1b] sm:text-3xl">
           {guide.title}
         </h2>
 

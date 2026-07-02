@@ -460,6 +460,42 @@ export default function AdminProvidersTable({
     setSortMode('newest')
   }
 
+  function applyStatusFilter(nextStatus: StatusFilter) {
+    setQuery('')
+    setStatusFilter(nextStatus)
+    setCategoryFilter('all')
+    setFlagFilter('all')
+    setQualityFilter('all')
+    setSortMode('newest')
+    }
+
+    function applyFlagFilter(nextFlag: FlagFilter) {
+    setQuery('')
+    setStatusFilter('all')
+    setCategoryFilter('all')
+    setFlagFilter(nextFlag)
+    setQualityFilter('all')
+    setSortMode('newest')
+    }
+
+    function applyQualityFilter(nextQuality: QualityFilter) {
+    setQuery('')
+    setStatusFilter('all')
+    setCategoryFilter('all')
+    setFlagFilter('all')
+    setQualityFilter(nextQuality)
+    setSortMode('newest')
+    }
+
+    function applyPublishedGapsFilter() {
+    setQuery('')
+    setStatusFilter('published')
+    setCategoryFilter('all')
+    setFlagFilter('all')
+    setQualityFilter('incomplete')
+    setSortMode('newest')
+    }
+
   return (
     <>
       <div className="flex flex-wrap items-end justify-between gap-5">
@@ -479,29 +515,108 @@ export default function AdminProvidersTable({
         </div>
       </div>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-9">
-        <StatCard label="Published" value={publishedCount} />
-        <StatCard label="Drafts" value={draftCount} />
-        <StatCard label="Archived" value={archivedCount} />
-        <StatCard label="Featured" value={featuredCount} />
-        <StatCard label="Verified" value={verifiedCount} />
-        <StatCard label="Claimed" value={claimedCount} />
+        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-9">
         <StatCard
-          label="Duplicates"
-          value={duplicateCount}
-          highlight={duplicateCount > 0}
+            label="Published"
+            value={publishedCount}
+            active={statusFilter === 'published'}
+            onClick={() => applyStatusFilter('published')}
         />
+
         <StatCard
-          label="Incomplete"
-          value={incompleteCount}
-          highlight={incompleteCount > 0}
+            label="Drafts"
+            value={draftCount}
+            active={statusFilter === 'draft'}
+            onClick={() => applyStatusFilter('draft')}
         />
+
         <StatCard
-          label="Published gaps"
-          value={publishedIncompleteCount}
-          highlight={publishedIncompleteCount > 0}
+            label="Archived"
+            value={archivedCount}
+            active={statusFilter === 'archived'}
+            onClick={() => applyStatusFilter('archived')}
         />
-      </div>
+
+        <StatCard
+            label="Featured"
+            value={featuredCount}
+            active={flagFilter === 'featured'}
+            onClick={() => applyFlagFilter('featured')}
+        />
+
+        <StatCard
+            label="Verified"
+            value={verifiedCount}
+            active={flagFilter === 'verified'}
+            onClick={() => applyFlagFilter('verified')}
+        />
+
+        <StatCard
+            label="Claimed"
+            value={claimedCount}
+            active={flagFilter === 'claimed'}
+            onClick={() => applyFlagFilter('claimed')}
+        />
+
+        <StatCard
+            label="Duplicates"
+            value={duplicateCount}
+            href="/admin/providers/duplicates"
+            highlight={duplicateCount > 0}
+        />
+
+        <StatCard
+            label="Incomplete"
+            value={incompleteCount}
+            active={qualityFilter === 'incomplete'}
+            highlight={incompleteCount > 0}
+            onClick={() => applyQualityFilter('incomplete')}
+        />
+
+        <StatCard
+            label="Published gaps"
+            value={publishedIncompleteCount}
+            active={
+            statusFilter === 'published' && qualityFilter === 'incomplete'
+            }
+            highlight={publishedIncompleteCount > 0}
+            onClick={applyPublishedGapsFilter}
+        />
+        </div>
+
+      {duplicateCount > 0 ? (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-[#d9c7b6] bg-[#fff2dc] px-4 py-3 text-sm text-[#a45f51]">
+            <div className="flex items-center gap-2 font-semibold">
+            <AlertTriangle className="h-4 w-4" strokeWidth={1.8} />
+            {duplicateCount} possible duplicate listings need review.
+            </div>
+
+            <Link
+            href="/admin/providers/duplicates"
+            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#a45f51] transition hover:text-[#211f1b]"
+            >
+            Review duplicates
+            </Link>
+        </div>
+      ) : null}
+
+      {publishedIncompleteCount > 0 || incompleteCount > 0 ? (
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[1.5rem] border border-[#d9c7b6] bg-[#fff2dc] px-4 py-3 text-sm text-[#a45f51]">
+            <div className="flex items-center gap-2 font-semibold">
+            <AlertTriangle className="h-4 w-4" strokeWidth={1.8} />
+            {publishedIncompleteCount > 0
+                ? `${publishedIncompleteCount} published listings have quality gaps.`
+                : `${incompleteCount} listings have quality gaps.`}
+            </div>
+
+            <Link
+            href="/admin/providers/quality"
+            className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#a45f51] transition hover:text-[#211f1b]"
+            >
+            Review quality
+            </Link>
+        </div>
+      ) : null}
 
       <section className="mt-8 rounded-[2rem] border border-[#e2d7c8] bg-white/70 p-4 shadow-[0_24px_80px_rgba(61,50,38,0.06)] sm:p-5">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
@@ -702,27 +817,54 @@ function StatCard({
   label,
   value,
   highlight = false,
+  active = false,
+  href,
+  onClick,
 }: {
   label: string
   value: number
   highlight?: boolean
+  active?: boolean
+  href?: string
+  onClick?: () => void
 }) {
-  return (
-    <div
-      className={[
-        'rounded-[1.5rem] border p-4',
-        highlight
-          ? 'border-[#d9c7b6] bg-[#fff2dc]'
-          : 'border-[#e2d7c8] bg-white/70',
-      ].join(' ')}
-    >
+  const className = [
+    'block w-full rounded-[1.5rem] border p-4 text-left transition',
+    href || onClick ? 'cursor-pointer hover:-translate-y-0.5' : '',
+    active
+      ? 'border-[#4f5d3d] bg-[#eef0e6] shadow-[0_18px_55px_rgba(61,50,38,0.08)]'
+      : highlight
+        ? 'border-[#d9c7b6] bg-[#fff2dc] hover:bg-[#f9ead0]'
+        : 'border-[#e2d7c8] bg-white/70 hover:bg-white',
+  ].join(' ')
+
+  const content = (
+    <>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8a8277]">
         {label}
       </p>
 
       <p className="mt-2 font-serif text-4xl text-[#211f1b]">{value}</p>
-    </div>
+    </>
   )
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    )
+  }
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={className}>
+        {content}
+      </button>
+    )
+  }
+
+  return <div className={className}>{content}</div>
 }
 
 function ProviderAdminRow({

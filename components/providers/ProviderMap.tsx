@@ -114,6 +114,7 @@ export default function ProviderMap({
     null
   )
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [mapUnavailable, setMapUnavailable] = useState(false)
 
   useEffect(() => {
     onProviderSelectRef.current = onProviderSelect
@@ -223,12 +224,19 @@ export default function ProviderMap({
     if (!containerRef.current || mapRef.current) return
     if (!mapboxToken) return
 
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: initialCenterRef.current,
-      zoom: initialZoomRef.current,
-    })
+    let map: mapboxgl.Map
+
+    try {
+      map = new mapboxgl.Map({
+        container: containerRef.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: initialCenterRef.current,
+        zoom: initialZoomRef.current,
+      })
+    } catch {
+      window.setTimeout(() => setMapUnavailable(true), 0)
+      return
+    }
 
     mapRef.current = map
 
@@ -539,6 +547,22 @@ export default function ProviderMap({
           <p className="mt-3 max-w-md text-sm leading-6 text-[#655d52]">
             Add NEXT_PUBLIC_MAPBOX_TOKEN to your environment variables to show
             the provider map.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (mapUnavailable) {
+    return (
+      <div className="flex h-full min-h-[18rem] items-center justify-center rounded-[1.5rem] bg-[#f2ece2] p-6 text-center sm:min-h-[24rem] sm:rounded-[2rem]">
+        <div>
+          <p className="font-serif text-2xl text-[#211f1b] sm:text-3xl">
+            Map unavailable.
+          </p>
+
+          <p className="mt-3 max-w-md text-sm leading-6 text-[#655d52]">
+            Your provider list is still available below.
           </p>
         </div>
       </div>

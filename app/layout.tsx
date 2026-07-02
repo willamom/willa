@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import { siteConfig } from '@/lib/site'
 
@@ -110,6 +112,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     >
       <body className="min-h-full bg-[#fbf7ef] text-[#211f1b]">
         {children}
+
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

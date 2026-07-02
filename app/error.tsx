@@ -1,28 +1,40 @@
 'use client'
 
-export default function Error({
-  reset,
-}: {
-  error: Error & { digest?: string }
+import Link from 'next/link'
+import { useEffect } from 'react'
+
+type ErrorPageProps = {
+  error: Error & {
+    digest?: string
+  }
   reset: () => void
-}) {
+}
+
+export default function ErrorPage({ error, reset }: ErrorPageProps) {
+  useEffect(() => {
+    console.error(error)
+  }, [error])
+
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#fbf7ef] px-6 text-[#211f1b]">
-      <section className="w-full max-w-xl rounded-[3rem] bg-[#f2ece2] p-8 text-center shadow-[0_24px_80px_rgba(61,50,38,0.07)] sm:p-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#39472c]">
+    <main className="flex min-h-screen items-center justify-center bg-[#fbf7ef] px-5 text-[#211f1b]">
+      <div className="w-full max-w-xl rounded-[2rem] border border-[#e2d7c8] bg-white/70 p-8 text-center shadow-[0_24px_80px_rgba(61,50,38,0.07)]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#eef0e6] font-serif text-2xl text-[#4f5d3d]">
+          W
+        </div>
+
+        <p className="mt-6 text-xs font-semibold uppercase tracking-[0.24em] text-[#39472c]">
           Something went wrong
         </p>
 
-        <h1 className="mt-5 font-serif text-5xl leading-tight">
-          Willa dropped a stitch.
+        <h1 className="mt-4 font-serif text-4xl leading-tight text-[#211f1b]">
+          Willa hit a little bump.
         </h1>
 
-        <p className="mx-auto mt-5 max-w-md text-sm leading-6 text-[#5f574d]">
-          Something didn’t load the way it should. You can try again, or head
-          back to your Willa.
+        <p className="mt-4 text-sm leading-6 text-[#655d52]">
+          The page couldn’t load properly. You can try again or go back home.
         </p>
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
             type="button"
             onClick={reset}
@@ -31,14 +43,14 @@ export default function Error({
             Try again
           </button>
 
-          <a
-            href="/profile"
-            className="rounded-full bg-[#fbf7ef] px-6 py-3 text-sm font-semibold text-[#4f5d3d] transition hover:bg-white hover:text-[#211f1b]"
+          <Link
+            href="/"
+            className="rounded-full border border-[#d8cabb] bg-white px-6 py-3 text-sm font-semibold text-[#211f1b] transition hover:bg-[#fbf7ef]"
           >
-            Go to my Willa
-          </a>
+            Go home
+          </Link>
         </div>
-      </section>
+      </div>
     </main>
   )
 }

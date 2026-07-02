@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 
 import type { WillaProvider } from '@/types/providers'
+import ProviderInquiryButton from '@/components/providers/ProviderInquiryButton'
 
 type ProviderProfileInfoCardProps = {
   provider: WillaProvider
@@ -38,6 +39,11 @@ export default function ProviderProfileInfoCard({
       <h2 className="font-serif text-2xl text-[#211f1b]">
         Contact & location
       </h2>
+
+      <ProviderInquiryButton
+        provider={provider}
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#a45f51] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#8f5145]"
+        />
 
       <div className="mt-5 space-y-4 text-sm text-[#655d52]">
         <ContactRow

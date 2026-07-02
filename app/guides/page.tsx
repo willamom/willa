@@ -54,18 +54,18 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
       <SiteHeader />
 
       <main className="min-h-screen bg-[#fbf7ef] text-[#211f1b]">
-        <section className="px-6 py-10 sm:px-10 lg:px-14 lg:py-12">
+        <section className="px-4 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
           <div className="mx-auto max-w-7xl">
-            <div className="rounded-[3rem] bg-[#f2ece2] px-6 py-12 shadow-[0_24px_80px_rgba(61,50,38,0.07)] sm:px-10 lg:px-12">
+            <div className="rounded-[2rem] bg-[#f2ece2] px-5 py-10 shadow-[0_24px_80px_rgba(61,50,38,0.07)] sm:rounded-[3rem] sm:px-10 sm:py-12 lg:px-12">
               <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#39472c]">
                 Willa Guides
               </p>
 
-              <h1 className="mt-5 max-w-3xl font-serif text-5xl leading-tight tracking-tight sm:text-6xl">
+              <h1 className="mt-5 max-w-3xl font-serif text-4xl leading-[1.08] tracking-tight sm:text-6xl sm:leading-tight">
                 Clear answers for pregnancy, birth, and postpartum.
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5f574d]">
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[#5f574d] sm:text-lg sm:leading-8">
                 Search the question on your mind. Save what matters, then turn
                 it into your care plan, registry ideas, and support list.
               </p>

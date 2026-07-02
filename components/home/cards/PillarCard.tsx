@@ -12,25 +12,25 @@ export default function PillarCard({ card }: PillarCardProps) {
   return (
     <Link
       href={href}
-      className="group block h-full rounded-3xl border border-[#e5dccf] bg-[#fffdf8] p-7 text-center shadow-sm transition hover:-translate-y-1 hover:border-[#d8cbbb] hover:bg-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#4f5d3d]/30 sm:p-8"
+      className="group block h-full rounded-[1.5rem] border border-[#e5dccf] bg-[#fffdf8]/88 p-5 text-center shadow-[0_10px_30px_rgba(61,50,38,0.035)] transition hover:-translate-y-0.5 hover:border-[#d8cbbb] hover:bg-white hover:shadow-[0_16px_42px_rgba(61,50,38,0.06)] focus:outline-none focus:ring-2 focus:ring-[#4f5d3d]/30 sm:p-6"
       aria-label={`${card.action}: ${card.title}`}
     >
       <article className="flex h-full flex-col items-center">
         <div
-          className={`mb-6 flex h-18 w-18 items-center justify-center rounded-full transition group-hover:scale-105 sm:h-20 sm:w-20 ${card.iconBg} ${card.iconColor}`}
+          className={`mb-5 flex h-14 w-14 items-center justify-center rounded-full transition group-hover:scale-105 sm:h-16 sm:w-16 ${card.iconBg} ${card.iconColor}`}
         >
           <PillarIcon name={card.icon} />
         </div>
 
-        <h3 className="text-lg font-semibold text-[#211f1b]">
+        <h3 className="text-base font-semibold text-[#211f1b]">
           {card.title}
         </h3>
 
-        <p className="mt-3 flex-1 text-sm leading-6 text-[#5f574d]">
+        <p className="mt-2 flex-1 text-sm leading-6 text-[#5f574d]">
           {card.description}
         </p>
 
-        <p className="mt-6 text-sm font-semibold text-[#4f5d3d] transition group-hover:text-[#211f1b]">
+        <p className="mt-5 text-sm font-semibold text-[#4f5d3d] transition group-hover:text-[#211f1b]">
           {card.action} →
         </p>
       </article>
@@ -44,14 +44,14 @@ function getPillarHref(icon: PillarCardType['icon']) {
   }
 
   if (icon === 'plan') {
-    return '/profile#care-plan'
+    return '/me#care-plan'
   }
 
   if (icon === 'registry') {
     return '/registry'
   }
 
-  return '/near-me'
+  return '/providers'
 }
 
 function PillarIcon({ name }: { name: PillarCardType['icon'] }) {
@@ -59,7 +59,7 @@ function PillarIcon({ name }: { name: PillarCardType['icon'] }) {
     return (
       <svg
         viewBox="0 0 24 24"
-        className="h-8 w-8"
+        className="h-6 w-6"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.7"
@@ -81,7 +81,7 @@ function PillarIcon({ name }: { name: PillarCardType['icon'] }) {
     return (
       <svg
         viewBox="0 0 24 24"
-        className="h-8 w-8"
+        className="h-6 w-6"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.7"
@@ -104,7 +104,7 @@ function PillarIcon({ name }: { name: PillarCardType['icon'] }) {
     return (
       <svg
         viewBox="0 0 24 24"
-        className="h-8 w-8"
+        className="h-6 w-6"
         fill="none"
         stroke="currentColor"
         strokeWidth="1.7"
@@ -124,7 +124,7 @@ function PillarIcon({ name }: { name: PillarCardType['icon'] }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-8 w-8"
+      className="h-6 w-6"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.7"

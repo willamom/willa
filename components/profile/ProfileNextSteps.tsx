@@ -11,7 +11,7 @@ const nextSteps = [
     title: 'Find support near me',
     description:
       'Explore doulas, lactation consultants, pelvic floor support, and more.',
-    href: '/near-me',
+    href: '/support',
     eyebrow: 'Support',
   },
   {

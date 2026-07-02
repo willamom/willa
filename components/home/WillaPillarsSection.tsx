@@ -4,14 +4,14 @@ import PillarCard from './cards/PillarCard'
 
 export default function WillaPillarsSection() {
   return (
-    <section className="px-5 pb-12 pt-4 sm:px-8 sm:pb-16 lg:px-14">
+    <section className="px-4 pb-10 pt-4 sm:px-8 sm:pb-14 lg:px-14">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#39472c]">
             Your care home base
           </p>
 
-          <h2 className="mt-4 font-serif text-4xl tracking-tight text-[#211f1b] sm:text-5xl">
+          <h2 className="mt-4 font-serif text-[2.35rem] leading-[1.08] tracking-tight text-[#211f1b] sm:text-5xl">
             Everything <span className="italic text-[#a45f51]">you</span> need,
             all in one place.
           </h2>
@@ -23,7 +23,7 @@ export default function WillaPillarsSection() {
           </p>
         </div>
 
-        <div className="mt-9 grid gap-4 sm:gap-5 md:grid-cols-2 lg:mt-10 lg:grid-cols-4">
+        <div className="mx-auto mt-8 grid max-w-6xl gap-4 sm:gap-5 md:grid-cols-2 lg:mt-9 lg:grid-cols-4">
           {pillarCards.map((card) => (
             <PillarCard key={card.title} card={card} />
           ))}

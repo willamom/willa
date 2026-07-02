@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { FaInstagram } from 'react-icons/fa6'
 import {
   BadgeCheck,
   ExternalLink,
   Globe,
-  Mail,
   MapPin,
   Phone,
   Search,
@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react'
 
+import ProviderInquiryButton from '@/components/providers/ProviderInquiryButton'
 import ProviderMap from '@/components/providers/ProviderMap'
 import {
   getProviderCategoryConfig,
@@ -23,11 +24,13 @@ import {
 } from '@/data/providers/categories'
 import type { ProviderCategory, WillaProvider } from '@/types/providers'
 
+type SelectedCategory = ProviderCategory | 'all'
+
 type ProviderDirectoryProps = {
   providers: WillaProvider[]
+  initialCategory?: SelectedCategory
+  initialQuery?: string
 }
-
-type SelectedCategory = ProviderCategory | 'all'
 
 type FlyToRequest = {
   id: number
@@ -43,12 +46,33 @@ function getInstagramUrl(instagram: string) {
   return `https://instagram.com/${instagram.replace('@', '')}`
 }
 
+function buildProvidersUrl(category: SelectedCategory, query: string) {
+  const params = new URLSearchParams()
+  const cleanQuery = query.trim()
+
+  if (category !== 'all') {
+    params.set('category', category)
+  }
+
+  if (cleanQuery) {
+    params.set('q', cleanQuery)
+  }
+
+  const queryString = params.toString()
+
+  return queryString ? `/providers?${queryString}` : '/providers'
+}
+
 export default function ProviderDirectory({
   providers,
+  initialCategory = 'all',
+  initialQuery = '',
 }: ProviderDirectoryProps) {
-  const [query, setQuery] = useState('')
-  const [debouncedQuery, setDebouncedQuery] = useState('')
-  const [category, setCategory] = useState<SelectedCategory>('all')
+  const router = useRouter()
+
+  const [query, setQuery] = useState(initialQuery)
+  const [debouncedQuery, setDebouncedQuery] = useState(initialQuery.trim())
+  const [category, setCategory] = useState<SelectedCategory>(initialCategory)
   const [selectedProvider, setSelectedProvider] =
     useState<WillaProvider | null>(null)
   const [focusProviderId, setFocusProviderId] = useState<string | null>(null)
@@ -60,6 +84,23 @@ export default function ProviderDirectory({
   const [geoLoading, setGeoLoading] = useState(false)
   const [geoError, setGeoError] = useState<string | null>(null)
   const [flyToRequest, setFlyToRequest] = useState<FlyToRequest | null>(null)
+
+  useEffect(() => {
+    setCategory(initialCategory)
+    setSelectedProvider(null)
+    setFocusProviderId(null)
+    setUseMapArea(false)
+    setViewportProviders(null)
+  }, [initialCategory])
+
+  useEffect(() => {
+    setQuery(initialQuery)
+    setDebouncedQuery(initialQuery.trim())
+    setSelectedProvider(null)
+    setFocusProviderId(null)
+    setUseMapArea(false)
+    setViewportProviders(null)
+  }, [initialQuery])
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -134,6 +175,29 @@ export default function ProviderDirectory({
     setUseMapArea(false)
     setViewportProviders(null)
     setGeoError(null)
+    router.replace('/providers', { scroll: false })
+  }
+
+  function handleCategoryChange(nextCategory: SelectedCategory) {
+    setCategory(nextCategory)
+    setSelectedProvider(null)
+    setFocusProviderId(null)
+    setUseMapArea(false)
+    setViewportProviders(null)
+    setGeoError(null)
+
+    router.replace(buildProvidersUrl(nextCategory, query), {
+      scroll: false,
+    })
+  }
+
+  function handleClearQuery() {
+    setQuery('')
+    setDebouncedQuery('')
+
+    router.replace(buildProvidersUrl(category, ''), {
+      scroll: false,
+    })
   }
 
   function handleSelectProvider(provider: WillaProvider) {
@@ -182,14 +246,14 @@ export default function ProviderDirectory({
   }
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-5 py-8 text-[#211f1b] sm:px-8 lg:px-10 lg:py-12">
+    <section className="mx-auto w-full max-w-7xl px-4 py-8 text-[#211f1b] sm:px-8 lg:px-10 lg:py-12">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#39472c]">
             Find support near you
           </p>
 
-          <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-tight tracking-tight text-[#211f1b] sm:text-6xl">
+          <h1 className="mt-4 max-w-2xl font-serif text-[2.65rem] leading-[1.06] tracking-tight text-[#211f1b] sm:text-6xl sm:leading-tight">
             Pregnancy and postpartum support, mapped.
           </h1>
         </div>
@@ -201,15 +265,23 @@ export default function ProviderDirectory({
         </p>
       </div>
 
-      <div className="mt-8 rounded-[2rem] border border-[#e2d7c8] bg-[#f8f3eb] p-4 shadow-[0_18px_55px_rgba(61,50,38,0.055)] sm:p-5">
+      <div className="mt-8 rounded-[1.5rem] border border-[#e2d7c8] bg-[#f8f3eb] p-4 shadow-[0_18px_55px_rgba(61,50,38,0.055)] sm:rounded-[2rem] sm:p-5">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div className="relative">
+          <form
+            action="/providers"
+            className="relative"
+          >
             <Search
               className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a8277]"
               strokeWidth={1.8}
             />
 
+            {category !== 'all' ? (
+              <input type="hidden" name="category" value={category} />
+            ) : null}
+
             <input
+              name="q"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search doulas, lactation, therapy, postpartum care..."
@@ -219,21 +291,21 @@ export default function ProviderDirectory({
             {query ? (
               <button
                 type="button"
-                onClick={() => setQuery('')}
+                onClick={handleClearQuery}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8a8277] transition hover:text-[#211f1b]"
                 aria-label="Clear search"
               >
                 <X className="h-4 w-4" strokeWidth={1.8} />
               </button>
             ) : null}
-          </div>
+          </form>
 
-          <div className="flex flex-wrap items-center gap-3 text-sm">
+          <div className="grid grid-cols-2 gap-2 text-sm sm:flex sm:flex-wrap sm:items-center sm:gap-3">
             <span className="font-semibold text-[#211f1b]">
               {shownProviders.length}
             </span>
 
-            <span className="text-[#655d52]">
+            <span className="text-[#655d52] sm:mr-0">
               {shownProviders.length === 1 ? 'provider' : 'providers'}
             </span>
 
@@ -245,7 +317,7 @@ export default function ProviderDirectory({
                 setFocusProviderId(null)
               }}
               className={[
-                'rounded-full px-4 py-2 text-sm font-semibold transition',
+                'col-span-2 rounded-full px-4 py-2 text-sm font-semibold transition sm:col-span-1',
                 useMapArea
                   ? 'bg-[#4f5d3d] text-white'
                   : 'bg-white text-[#4f5d3d] hover:text-[#211f1b]',
@@ -258,7 +330,7 @@ export default function ProviderDirectory({
               type="button"
               onClick={handleUseMyLocation}
               disabled={geoLoading}
-              className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#4f5d3d] transition hover:text-[#211f1b] disabled:opacity-50"
+              className="col-span-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#4f5d3d] transition hover:text-[#211f1b] disabled:opacity-50 sm:col-span-1"
             >
               {geoLoading ? 'Locating...' : 'Use my location'}
             </button>
@@ -267,7 +339,7 @@ export default function ProviderDirectory({
               <button
                 type="button"
                 onClick={resetFilters}
-                className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#a45f51] transition hover:text-[#211f1b]"
+                className="col-span-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#a45f51] transition hover:text-[#211f1b] sm:col-span-1"
               >
                 Reset
               </button>
@@ -275,15 +347,11 @@ export default function ProviderDirectory({
           </div>
         </div>
 
-        <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-4 flex flex-wrap gap-2">
           <CategoryPill
             label="All"
             active={category === 'all'}
-            onClick={() => {
-              setCategory('all')
-              setSelectedProvider(null)
-              setFocusProviderId(null)
-            }}
+            onClick={() => handleCategoryChange('all')}
           />
 
           {providerCategories.map((item) => (
@@ -291,11 +359,7 @@ export default function ProviderDirectory({
               key={item.slug}
               label={item.label}
               active={category === item.slug}
-              onClick={() => {
-                setCategory(item.slug)
-                setSelectedProvider(null)
-                setFocusProviderId(null)
-              }}
+              onClick={() => handleCategoryChange(item.slug)}
             />
           ))}
         </div>
@@ -312,7 +376,7 @@ export default function ProviderDirectory({
         ) : null}
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(22rem,0.9fr)_minmax(0,1.45fr)] lg:items-start">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(20rem,0.9fr)_minmax(0,1.45fr)] lg:items-start">
         <aside className="order-2 lg:order-1 lg:h-[42rem]">
           {selectedProvider ? (
             <ProviderDetailPanel
@@ -352,7 +416,7 @@ export default function ProviderDirectory({
         </aside>
 
         <div className="order-1 lg:order-2">
-          <div className="sticky top-6 h-[26rem] overflow-hidden rounded-[2rem] border border-[#e2d7c8] bg-[#f2ece2] shadow-[0_24px_80px_rgba(61,50,38,0.08)] sm:h-[32rem] lg:h-[42rem]">
+          <div className="sticky top-24 h-[22rem] overflow-hidden rounded-[1.5rem] border border-[#e2d7c8] bg-[#f2ece2] shadow-[0_24px_80px_rgba(61,50,38,0.08)] sm:h-[32rem] sm:rounded-[2rem] lg:top-6 lg:h-[42rem]">
             <ProviderMap
               providers={filteredProviders}
               focusProviderId={focusProviderId}
@@ -382,7 +446,7 @@ function CategoryPill({
       type="button"
       onClick={onClick}
       className={[
-        'shrink-0 rounded-full px-3.5 py-2 text-xs font-semibold transition',
+        'whitespace-nowrap rounded-full px-3.5 py-2 text-xs font-semibold transition sm:text-sm',
         active
           ? 'bg-[#4f5d3d] text-white shadow-sm'
           : 'bg-white text-[#655d52] hover:bg-[#fbf7ef] hover:text-[#211f1b]',
@@ -438,7 +502,7 @@ function ProviderListCard({
     <button
       type="button"
       onClick={onClick}
-      className="group w-full px-1 py-5 text-left transition hover:bg-white/45 sm:px-3"
+      className="group w-full min-w-0 px-1 py-5 text-left transition hover:bg-white/45 sm:px-3"
     >
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full bg-[#f5ded5] px-2.5 py-1 text-[0.68rem] font-semibold text-[#a45f51]">
@@ -467,7 +531,7 @@ function ProviderListCard({
         ) : null}
       </div>
 
-      <h3 className="mt-3 font-serif text-2xl leading-tight text-[#211f1b] transition group-hover:text-[#4f5d3d]">
+      <h3 className="mt-3 break-words font-serif text-2xl leading-tight text-[#211f1b] transition group-hover:text-[#4f5d3d]">
         {provider.name}
       </h3>
 
@@ -551,7 +615,7 @@ function ProviderDetailPanel({
         ) : null}
       </div>
 
-      <h2 className="mt-4 font-serif text-4xl leading-tight text-[#211f1b]">
+      <h2 className="mt-4 break-words font-serif text-3xl leading-tight text-[#211f1b] sm:text-4xl">
         {provider.name}
       </h2>
 
@@ -621,13 +685,10 @@ function ProviderDetailPanel({
           ) : null}
 
           {provider.email ? (
-            <a
-              href={`mailto:${provider.email}`}
+            <ProviderInquiryButton
+              provider={provider}
               className="flex items-center justify-center gap-2 rounded-xl border border-[#e2d7c8] bg-white/60 px-4 py-3 text-sm font-semibold text-[#4f5d3d] transition hover:bg-white hover:text-[#211f1b]"
-            >
-              <Mail className="h-4 w-4" strokeWidth={1.8} />
-              <span className="sr-only sm:not-sr-only">Email</span>
-            </a>
+            />
           ) : null}
 
           {provider.phone ? (

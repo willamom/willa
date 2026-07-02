@@ -27,7 +27,7 @@ export default function ProfileHero({ profile, pregnancy }: ProfileHeroProps) {
             Your Willa
           </p>
 
-          <h1 className="mt-5 max-w-3xl font-serif text-4xl leading-tight tracking-tight text-[#211f1b] sm:text-6xl">
+          <h1 className="mt-5 max-w-3xl break-words font-serif text-[2.55rem] leading-[1.06] tracking-tight text-[#211f1b] sm:text-6xl sm:leading-tight">
             {profileName === 'Your'
               ? 'Your care home base'
               : `${profileName}’s care home base`}
@@ -38,7 +38,7 @@ export default function ProfileHero({ profile, pregnancy }: ProfileHeroProps) {
             registry ideas, and the support you may want around you.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-wrap gap-2 sm:gap-3">
             <Pill>{pregnancy.weekLabel}</Pill>
             <Pill>{pregnancy.trimester}</Pill>
             <Pill>Due {pregnancy.dueDateLabel}</Pill>
@@ -103,7 +103,7 @@ export default function ProfileHero({ profile, pregnancy }: ProfileHeroProps) {
 
 function Pill({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full bg-[#fbf7ef]/85 px-4 py-2 text-sm font-medium text-[#4f5d3d] shadow-[0_8px_20px_rgba(61,50,38,0.035)]">
+    <span className="max-w-full break-words rounded-full bg-[#fbf7ef]/85 px-4 py-2 text-sm font-medium text-[#4f5d3d] shadow-[0_8px_20px_rgba(61,50,38,0.035)]">
       {children}
     </span>
   )
