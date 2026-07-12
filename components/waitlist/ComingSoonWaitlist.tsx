@@ -47,6 +47,51 @@ type BusinessTypeOption = {
   Icon: LucideIcon
 }
 
+type MomStageOption = {
+  label: string
+  description: string
+  Icon: LucideIcon
+}
+
+type MomNeedOption = {
+  label: string
+  Icon: LucideIcon
+}
+
+const momStageOptions: MomStageOption[] = [
+  {
+    label: 'Pregnant',
+    description: 'I’m preparing for baby and myself.',
+    Icon: Baby,
+  },
+  {
+    label: 'Postpartum',
+    description: 'I’m in the thick of recovery, feeding, sleep, and feelings.',
+    Icon: Heart,
+  },
+  {
+    label: 'Trying or planning',
+    description: 'I’m gathering information before the next chapter.',
+    Icon: Sparkles,
+  },
+  {
+    label: 'Mom of older kids',
+    description: 'I still want support, ideas, and a softer village.',
+    Icon: Home,
+  },
+]
+
+const momNeedOptions: MomNeedOption[] = [
+  { label: 'Pregnancy guides', Icon: BookOpen },
+  { label: 'Birth planning', Icon: CalendarDays },
+  { label: 'Postpartum recovery', Icon: Heart },
+  { label: 'Registry help', Icon: Package },
+  { label: 'Local support', Icon: HeartHandshake },
+  { label: 'Feeding support', Icon: Droplet },
+  { label: 'Mental load & emotions', Icon: Brain },
+  { label: 'I’m not sure yet', Icon: Sparkles },
+]
+
 const businessTypeOptions: BusinessTypeOption[] = [
   { label: 'Doula', Icon: HeartHandshake },
   { label: 'Midwife', Icon: UserRound },
@@ -84,7 +129,14 @@ export default function ComingSoonWaitlist({
 }: ComingSoonWaitlistProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [audience, setAudience] = useState<Audience>(defaultAudience)
+
   const [email, setEmail] = useState('')
+  const [fullName, setFullName] = useState('')
+
+  const [momStage, setMomStage] = useState('')
+  const [dueDateOrBabyAge, setDueDateOrBabyAge] = useState('')
+  const [momNeeds, setMomNeeds] = useState<string[]>([])
+
   const [businessType, setBusinessType] = useState('')
   const [businessName, setBusinessName] = useState('')
   const [website, setWebsite] = useState('')
@@ -116,6 +168,16 @@ export default function ComingSoonWaitlist({
     setIsOpen(false)
     setErrorMessage('')
     setIsBusinessDropdownOpen(false)
+  }
+
+  function toggleMomNeed(need: string) {
+    setMomNeeds((currentNeeds) => {
+      if (currentNeeds.includes(need)) {
+        return currentNeeds.filter((item) => item !== need)
+      }
+
+      return [...currentNeeds, need]
+    })
   }
 
   useEffect(() => {
@@ -150,8 +212,23 @@ export default function ComingSoonWaitlist({
       return
     }
 
+    if (!fullName.trim()) {
+      setErrorMessage('Please enter your name.')
+      return
+    }
+    
     if (!email.trim()) {
       setErrorMessage('Please enter your email address.')
+      return
+    }
+
+    if (audience === 'mom' && !momStage) {
+      setErrorMessage('Please choose where you are in motherhood right now.')
+      return
+    }
+
+    if (audience === 'mom' && momNeeds.length === 0) {
+      setErrorMessage('Please choose at least one thing Willa can help with.')
       return
     }
 
@@ -172,12 +249,21 @@ export default function ComingSoonWaitlist({
     const { error } = await supabase.from('waitlist_submissions').insert({
       audience,
       email: email.trim().toLowerCase(),
+      full_name: fullName.trim(),
+
+      mom_stage: audience === 'mom' ? momStage : null,
+      due_date_or_baby_age:
+        audience === 'mom' ? dueDateOrBabyAge.trim() || null : null,
+      mom_needs: audience === 'mom' ? momNeeds : null,
+      mom_message: null,
+
       business_type: audience === 'provider' ? businessType : null,
       business_name: audience === 'provider' ? businessName.trim() : null,
       website: audience === 'provider' ? website.trim() || null : null,
       social_handle:
         audience === 'provider' ? socialHandle.trim() || null : null,
       message: audience === 'provider' ? message.trim() || null : null,
+
       source: 'coming_soon',
       status: 'new',
     })
@@ -192,10 +278,16 @@ export default function ComingSoonWaitlist({
     setSuccessMessage(
       audience === 'provider'
         ? 'Thank you. We’ll be in touch when Willa opens provider partnerships.'
-        : 'You’re on the list. We’ll only send updates worth opening.'
+        : 'You’re on the list. Willa will meet you where motherhood actually is.'
     )
 
     setEmail('')
+    setFullName('')
+
+    setMomStage('')
+    setDueDateOrBabyAge('')
+    setMomNeeds([])
+
     setBusinessType('')
     setBusinessName('')
     setWebsite('')
@@ -254,12 +346,15 @@ export default function ComingSoonWaitlist({
               </p>
 
               <h2 className="mt-6 font-serif text-4xl leading-tight text-[#211f1b] sm:text-5xl">
-                Join the waitlist
+                {audience === 'mom'
+                  ? 'Find your Willa starting point'
+                  : 'Join the provider list'}
               </h2>
 
               <p className="mt-4 text-base leading-7 text-[#655d52]">
-                Be the first to know when Willa launches. We’ll send updates
-                only when there’s something worth sharing.
+                {audience === 'mom'
+                  ? 'Tell us where you are, what feels loud right now, and what kind of support would actually help.'
+                  : 'Tell us a little about your work so we can keep you in the loop as Willa grows.'}
               </p>
 
               <div className="mx-auto mt-7 flex max-w-md items-center gap-4">
@@ -374,6 +469,16 @@ export default function ComingSoonWaitlist({
                   </div>
                 </div>
 
+                <Field label="Your name" required>
+                  <input
+                    type="text"
+                    value={fullName}
+                    onChange={(event) => setFullName(event.target.value)}
+                    placeholder="Your name"
+                    className="w-full rounded-2xl border border-[#e2d7c8] bg-white/70 px-5 py-4 text-base text-[#211f1b] outline-none transition placeholder:text-[#aaa196] focus:border-[#4f5d3d] focus:bg-white"
+                  />
+                </Field>
+                
                 <Field label="Email address" required>
                   <input
                     type="email"
@@ -383,6 +488,111 @@ export default function ComingSoonWaitlist({
                     className="w-full rounded-2xl border border-[#e2d7c8] bg-white/70 px-5 py-4 text-base text-[#211f1b] outline-none transition placeholder:text-[#aaa196] focus:border-[#4f5d3d] focus:bg-white"
                   />
                 </Field>
+
+                {audience === 'mom' ? (
+                  <div className="rounded-[1.75rem] border border-[#e8ded1] bg-white/55 p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a45f51]">
+                      Your Willa compass
+                    </p>
+
+                    <p className="mt-2 text-sm leading-6 text-[#655d52]">
+                      A few tiny questions so Willa can build for the real
+                      middle-of-the-night searches, not the imaginary perfect
+                      version of motherhood.
+                    </p>
+
+                    <div className="mt-5 space-y-6">
+                      <div>
+                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#211f1b]">
+                          Where are you right now? *
+                        </p>
+
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {momStageOptions.map(({ label, description, Icon }) => {
+                            const isSelected = momStage === label
+
+                            return (
+                              <button
+                                key={label}
+                                type="button"
+                                onClick={() => setMomStage(label)}
+                                className={`rounded-2xl border p-4 text-left transition ${
+                                  isSelected
+                                    ? 'border-[#b56f5f] bg-white shadow-[0_12px_35px_rgba(61,50,38,0.06)]'
+                                    : 'border-[#e2d7c8] bg-white/65 hover:bg-white'
+                                }`}
+                              >
+                                <span className="flex items-center gap-3">
+                                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f8f3eb] text-[#a45f51]">
+                                    <Icon className="h-4 w-4" strokeWidth={1.8} />
+                                  </span>
+
+                                  <span className="font-semibold text-[#211f1b]">
+                                    {label}
+                                  </span>
+                                </span>
+
+                                <span className="mt-2 block text-sm leading-6 text-[#655d52]">
+                                  {description}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+
+                      <Field label="Due date or baby age" optional>
+                        <input
+                          type="text"
+                          value={dueDateOrBabyAge}
+                          onChange={(event) =>
+                            setDueDateOrBabyAge(event.target.value)
+                          }
+                          placeholder="August 2026, 3 weeks postpartum, 8 months old..."
+                          className="w-full rounded-2xl border border-[#e2d7c8] bg-white/80 px-5 py-4 text-base text-[#211f1b] outline-none transition placeholder:text-[#aaa196] focus:border-[#4f5d3d] focus:bg-white"
+                        />
+                      </Field>
+
+                      <div>
+                        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#211f1b]">
+                          What do you want Willa to help with? *
+                        </p>
+
+                        <div className="grid gap-2.5 sm:grid-cols-2">
+                          {momNeedOptions.map(({ label, Icon }) => {
+                            const isSelected = momNeeds.includes(label)
+
+                            return (
+                              <button
+                                key={label}
+                                type="button"
+                                onClick={() => toggleMomNeed(label)}
+                                className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
+                                  isSelected
+                                    ? 'border-[#b56f5f] bg-[#fffaf7] text-[#211f1b] shadow-[0_10px_28px_rgba(61,50,38,0.055)]'
+                                    : 'border-[#e2d7c8] bg-white/65 text-[#48443d] hover:bg-white'
+                                }`}
+                              >
+                                <span
+                                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+                                    isSelected
+                                      ? 'bg-[#f5ded5] text-[#a45f51]'
+                                      : 'bg-[#f8f3eb] text-[#8a8277]'
+                                  }`}
+                                >
+                                  <Icon className="h-4 w-4" strokeWidth={1.8} />
+                                </span>
+
+                                {label}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                ) : null}
 
                 {audience === 'provider' ? (
                   <div className="rounded-[1.75rem] border border-[#e8ded1] bg-white/55 p-5">
@@ -465,7 +675,10 @@ export default function ComingSoonWaitlist({
                                     }`}
                                   >
                                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#fbf7ef] text-[#a45f51]">
-                                      <Icon className="h-4 w-4" strokeWidth={1.8} />
+                                      <Icon
+                                        className="h-4 w-4"
+                                        strokeWidth={1.8}
+                                      />
                                     </span>
 
                                     <span className="font-medium">{label}</span>
