@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-const defaultTitle = `${siteConfig.name} | Mom-first pregnancy and postpartum planning`
+const defaultTitle = `${siteConfig.name} | Pregnancy, Birth, & Postpartum`
 const ogImage = '/images/willa-og.png'
 const faviconVersion = '4'
 

@@ -4,7 +4,7 @@ import { siteConfig } from '@/lib/site'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${siteConfig.name} | Mom-first pregnancy and postpartum planning`,
+    name: `${siteConfig.name} | Pregnancy, Birth, & Postpartum`,
     short_name: siteConfig.name,
     description: siteConfig.description,
     start_url: '/',

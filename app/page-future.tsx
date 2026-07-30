@@ -8,7 +8,7 @@ import AnswerSearchSection from '@/components/home/AnswerSearchSection'
 import { siteConfig } from '@/lib/site'
 
 export const metadata = {
-  title: `${siteConfig.name} | Mom-first pregnancy, birth, and postpartum support`,
+  title: `${siteConfig.name} | Pregnancy, Birth, & Postpartum`,
   description:
     'Willa helps mothers prepare for pregnancy, birth, postpartum, and real-life support with practical guides, provider discovery, care planning, registry ideas, and saved resources.',
 }
