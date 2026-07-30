@@ -40,6 +40,10 @@ type Audience = 'mom' | 'provider'
 
 type ComingSoonWaitlistProps = {
   defaultAudience?: Audience
+  hideButtons?: boolean
+  autoOpenAudience?: Audience | null
+  autoOpenKey?: number
+  source?: string
 }
 
 type BusinessTypeOption = {
@@ -126,6 +130,10 @@ const businessTypeOptions: BusinessTypeOption[] = [
 
 export default function ComingSoonWaitlist({
   defaultAudience = 'mom',
+  hideButtons = false,
+  autoOpenAudience = null,
+  autoOpenKey = 0,
+  source = 'coming_soon',
 }: ComingSoonWaitlistProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [audience, setAudience] = useState<Audience>(defaultAudience)
@@ -181,6 +189,16 @@ export default function ComingSoonWaitlist({
   }
 
   useEffect(() => {
+    if (!autoOpenAudience || !autoOpenKey) return
+
+    setAudience(autoOpenAudience)
+    setIsOpen(true)
+    setErrorMessage('')
+    setSuccessMessage('')
+    setIsBusinessDropdownOpen(false)
+  }, [autoOpenAudience, autoOpenKey])
+
+  useEffect(() => {
     if (!isOpen) return
 
     const originalOverflow = document.body.style.overflow
@@ -216,7 +234,7 @@ export default function ComingSoonWaitlist({
       setErrorMessage('Please enter your name.')
       return
     }
-    
+
     if (!email.trim()) {
       setErrorMessage('Please enter your email address.')
       return
@@ -264,7 +282,7 @@ export default function ComingSoonWaitlist({
         audience === 'provider' ? socialHandle.trim() || null : null,
       message: audience === 'provider' ? message.trim() || null : null,
 
-      source: 'coming_soon',
+      source,
       status: 'new',
     })
 
@@ -298,23 +316,25 @@ export default function ComingSoonWaitlist({
 
   return (
     <>
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <button
-          type="button"
-          onClick={() => openModal('mom')}
-          className="rounded-xl bg-[#4f5d3d] px-8 py-4 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-[#414d31]"
-        >
-          Join the waitlist
-        </button>
+      {hideButtons ? null : (
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => openModal('mom')}
+            className="rounded-xl bg-[#4f5d3d] px-8 py-4 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-[#414d31]"
+          >
+            Join the waitlist
+          </button>
 
-        <button
-          type="button"
-          onClick={() => openModal('provider')}
-          className="rounded-xl border border-[#c8bdae] bg-white/70 px-8 py-4 text-center text-sm font-semibold text-[#211f1b] shadow-sm transition hover:bg-white"
-        >
-          Work with Willa
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => openModal('provider')}
+            className="rounded-xl border border-[#c8bdae] bg-white/70 px-8 py-4 text-center text-sm font-semibold text-[#211f1b] shadow-sm transition hover:bg-white"
+          >
+            Work with Willa
+          </button>
+        </div>
+      )}
 
       {isOpen ? (
         <div
@@ -478,7 +498,7 @@ export default function ComingSoonWaitlist({
                     className="w-full rounded-2xl border border-[#e2d7c8] bg-white/70 px-5 py-4 text-base text-[#211f1b] outline-none transition placeholder:text-[#aaa196] focus:border-[#4f5d3d] focus:bg-white"
                   />
                 </Field>
-                
+
                 <Field label="Email address" required>
                   <input
                     type="email"
@@ -508,36 +528,41 @@ export default function ComingSoonWaitlist({
                         </p>
 
                         <div className="grid gap-3 sm:grid-cols-2">
-                          {momStageOptions.map(({ label, description, Icon }) => {
-                            const isSelected = momStage === label
+                          {momStageOptions.map(
+                            ({ label, description, Icon }) => {
+                              const isSelected = momStage === label
 
-                            return (
-                              <button
-                                key={label}
-                                type="button"
-                                onClick={() => setMomStage(label)}
-                                className={`rounded-2xl border p-4 text-left transition ${
-                                  isSelected
-                                    ? 'border-[#b56f5f] bg-white shadow-[0_12px_35px_rgba(61,50,38,0.06)]'
-                                    : 'border-[#e2d7c8] bg-white/65 hover:bg-white'
-                                }`}
-                              >
-                                <span className="flex items-center gap-3">
-                                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f8f3eb] text-[#a45f51]">
-                                    <Icon className="h-4 w-4" strokeWidth={1.8} />
+                              return (
+                                <button
+                                  key={label}
+                                  type="button"
+                                  onClick={() => setMomStage(label)}
+                                  className={`rounded-2xl border p-4 text-left transition ${
+                                    isSelected
+                                      ? 'border-[#b56f5f] bg-white shadow-[0_12px_35px_rgba(61,50,38,0.06)]'
+                                      : 'border-[#e2d7c8] bg-white/65 hover:bg-white'
+                                  }`}
+                                >
+                                  <span className="flex items-center gap-3">
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f8f3eb] text-[#a45f51]">
+                                      <Icon
+                                        className="h-4 w-4"
+                                        strokeWidth={1.8}
+                                      />
+                                    </span>
+
+                                    <span className="font-semibold text-[#211f1b]">
+                                      {label}
+                                    </span>
                                   </span>
 
-                                  <span className="font-semibold text-[#211f1b]">
-                                    {label}
+                                  <span className="mt-2 block text-sm leading-6 text-[#655d52]">
+                                    {description}
                                   </span>
-                                </span>
-
-                                <span className="mt-2 block text-sm leading-6 text-[#655d52]">
-                                  {description}
-                                </span>
-                              </button>
-                            )
-                          })}
+                                </button>
+                              )
+                            }
+                          )}
                         </div>
                       </div>
 
@@ -580,7 +605,10 @@ export default function ComingSoonWaitlist({
                                       : 'bg-[#f8f3eb] text-[#8a8277]'
                                   }`}
                                 >
-                                  <Icon className="h-4 w-4" strokeWidth={1.8} />
+                                  <Icon
+                                    className="h-4 w-4"
+                                    strokeWidth={1.8}
+                                  />
                                 </span>
 
                                 {label}
@@ -589,7 +617,6 @@ export default function ComingSoonWaitlist({
                           })}
                         </div>
                       </div>
-
                     </div>
                   </div>
                 ) : null}

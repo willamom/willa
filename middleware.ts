@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { updateSession } from '@/lib/supabase/middleware'
 
-const publicRoutes = new Set([
+const closedBetaOpenRoutes = new Set([
   '/',
   '/privacy',
   '/terms',
@@ -11,14 +11,18 @@ const publicRoutes = new Set([
   '/disclaimer',
 ])
 
-const publicPrefixes = [
+const closedBetaOpenPrefixes = [
+  '/providers',
+  '/registry',
+  '/admin',
+  '/api',
+  '/auth',
   '/_next',
   '/images',
   '/icons',
-  '/admin',
 ]
 
-const publicFiles = [
+const closedBetaOpenFiles = [
   '/favicon.ico',
   '/favicon.png',
   '/manifest.webmanifest',
@@ -27,24 +31,30 @@ const publicFiles = [
   '/sitemap.xml',
 ]
 
+function isClosedBetaOpenPath(pathname: string) {
+  if (closedBetaOpenRoutes.has(pathname)) return true
+  if (closedBetaOpenFiles.includes(pathname)) return true
+
+  if (closedBetaOpenPrefixes.some((prefix) => pathname.startsWith(prefix))) {
+    return true
+  }
+
+  return pathname.includes('.')
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const isComingSoonMode = process.env.COMING_SOON_MODE === 'true'
 
-  const isPublicPrefix = publicPrefixes.some((prefix) =>
-    pathname.startsWith(prefix)
-  )
+  const isClosedBetaMode =
+    process.env.CLOSED_BETA_MODE === 'true' ||
+    process.env.COMING_SOON_MODE === 'true'
 
-  const isPublicFile = publicFiles.includes(pathname)
-  const isPublicRoute = publicRoutes.has(pathname)
+  if (isClosedBetaMode && !isClosedBetaOpenPath(pathname)) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    url.search = '?closedBeta=1'
 
-  if (
-    isComingSoonMode &&
-    !isPublicRoute &&
-    !isPublicPrefix &&
-    !isPublicFile
-  ) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(url)
   }
 
   return await updateSession(request)

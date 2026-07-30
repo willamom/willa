@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import {
   BookOpen,
-  ClipboardList,
   Gift,
   MapPin,
   Menu,
@@ -9,18 +8,18 @@ import {
   X,
 } from 'lucide-react'
 
-import AuthButton from '@/components/auth/AuthButton'
+const closedBetaHref = '/?closedBeta=1'
 
 const navLinks = [
   {
     label: 'Guides',
-    href: '/guides',
+    href: closedBetaHref,
     icon: BookOpen,
   },
   {
-    label: 'Care Plan',
-    href: '/profile#care-plan',
-    icon: ClipboardList,
+    label: 'Support',
+    href: '/providers',
+    icon: MapPin,
   },
   {
     label: 'Registry',
@@ -28,13 +27,8 @@ const navLinks = [
     icon: Gift,
   },
   {
-    label: 'Find Support',
-    href: '/providers',
-    icon: MapPin,
-  },
-  {
-    label: 'Profile',
-    href: '/profile',
+    label: 'My Willa',
+    href: closedBetaHref,
     icon: UserRound,
   },
 ]
@@ -53,7 +47,7 @@ export default function SiteHeader() {
         <nav className="hidden items-center gap-7 text-sm font-medium text-[#211f1b] lg:flex">
           {navLinks.map((link) => (
             <Link
-              key={link.href}
+              key={`${link.label}-${link.href}`}
               href={link.href}
               className="transition hover:text-[#56643f]"
             >
@@ -63,11 +57,21 @@ export default function SiteHeader() {
         </nav>
 
         <div className="hidden min-w-0 shrink items-center justify-end lg:flex">
-          <AuthButton />
+          <Link
+            href={closedBetaHref}
+            className="rounded-full bg-[#4f5d3d] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#414d31]"
+          >
+            Sign in
+          </Link>
         </div>
 
         <div className="flex min-w-0 items-center justify-end gap-2 lg:hidden">
-          <AuthButton />
+          <Link
+            href={closedBetaHref}
+            className="rounded-full bg-[#4f5d3d] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#414d31]"
+          >
+            Sign in
+          </Link>
 
           <details className="group relative">
             <summary
@@ -79,6 +83,7 @@ export default function SiteHeader() {
                 strokeWidth={2}
                 aria-hidden="true"
               />
+
               <X
                 className="hidden h-4 w-4 group-open:block"
                 strokeWidth={2}
@@ -93,7 +98,7 @@ export default function SiteHeader() {
 
                   return (
                     <Link
-                      key={link.href}
+                      key={`${link.label}-${link.href}`}
                       href={link.href}
                       className="flex items-center gap-3 rounded-[1.1rem] px-3 py-3 text-sm font-semibold text-[#3f3b35] transition hover:bg-[#f8f3eb] hover:text-[#4f5d3d]"
                     >

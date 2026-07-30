@@ -42,8 +42,7 @@ export default function HeroSection() {
             </h1>
 
             <p className="mt-7 max-w-[40rem] text-base leading-8 text-[#48443d] sm:text-lg">
-              Willa brings together practical guides, local support, care
-              planning, and registry ideas built for moms as well as babies.
+              Trusted guidance. Personalized planning. Practical tools. Local care.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
