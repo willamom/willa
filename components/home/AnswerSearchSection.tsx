@@ -59,10 +59,6 @@ export default function AnswerSearchSection() {
         <div className="hidden lg:block" />
 
         <div className="lg:pl-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#39472c] sm:tracking-[0.34em]">
-            Start here
-          </p>
-
           <h2 className="mt-4 max-w-3xl font-serif text-[2.35rem] leading-[1.06] tracking-tight text-[#211f1b] sm:text-5xl lg:text-[3.35rem]">
             Find what you need,{' '}
             <span className="italic text-[#a45f51]">when you need it.</span>

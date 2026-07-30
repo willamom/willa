@@ -75,10 +75,6 @@ export default async function FindSupportSection() {
       <div className="mx-auto grid max-w-7xl gap-10 border-y border-[#e5d9ca] py-10 sm:py-14 lg:grid-cols-[0.72fr_1.28fr] lg:items-start lg:py-16">
         <div className="flex h-full flex-col">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#39472c] sm:tracking-[0.34em]">
-              Provider directory
-            </p>
-
             <h2 className="mt-4 max-w-xl font-serif text-[2.35rem] leading-[1.06] tracking-tight text-[#211f1b] sm:text-5xl lg:text-[3.25rem]">
               Find your support team.
             </h2>

@@ -295,8 +295,8 @@ export default function ComingSoonWaitlist({
 
     setSuccessMessage(
       audience === 'provider'
-        ? 'Thank you. We’ll be in touch when Willa opens provider partnerships.'
-        : 'You’re on the list. Willa will meet you where motherhood actually is.'
+        ? 'Thank you. You’re on the provider list.'
+        : 'Thank you. You’re on the Willa waitlist.'
     )
 
     setEmail('')
@@ -389,11 +389,11 @@ export default function ComingSoonWaitlist({
             {successMessage ? (
               <div className="mt-8 rounded-[1.75rem] border border-[#d9e2cf] bg-white/80 p-6 text-center shadow-[0_14px_45px_rgba(61,50,38,0.05)]">
                 <p className="font-serif text-3xl text-[#211f1b]">
-                  You’re in.
+                  Thank you.
                 </p>
 
                 <p className="mt-3 text-sm leading-6 text-[#655d52]">
-                  {successMessage}
+                  You’re on the list.
                 </p>
 
                 <button

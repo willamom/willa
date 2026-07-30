@@ -20,24 +20,16 @@ type FooterSection = {
   links: FooterLink[]
 }
 
+const closedBetaHref = '/?closedBeta=1'
+
 const footerSections: FooterSection[] = [
-  {
-    title: 'Guides',
-    links: [
-      { label: 'All guides', href: '/guides' },
-      { label: 'Pregnancy', href: '/guides?category=Pregnancy' },
-      { label: 'Birth', href: '/guides?category=Birth' },
-      { label: 'Postpartum', href: '/guides?category=Postpartum' },
-      { label: 'Feeding', href: '/guides?category=Feeding' },
-    ],
-  },
   {
     title: 'Willa',
     links: [
-      { label: 'Profile', href: '/profile' },
-      { label: 'Care Plan', href: '/profile#care-plan' },
+      { label: 'Guides', href: closedBetaHref },
+      { label: 'Support', href: '/providers' },
       { label: 'Registry', href: '/registry' },
-      { label: 'Find Support', href: '/near-me' },
+      { label: 'My Willa', href: closedBetaHref },
     ],
   },
   {
@@ -88,26 +80,13 @@ export default function SiteFooter() {
             </Link>
 
             <p className="mt-5 max-w-md text-base leading-7 text-[#5f574d]">
-              Clear answers, care planning, and support for pregnancy, birth,
-              postpartum, and the fourth trimester.
+              Practical tools, registry ideas, and support for pregnancy, birth,
+              and postpartum.
             </p>
-
-            <div className="mt-7 max-w-xl rounded-3xl bg-[#fbf7ef]/75 p-5 shadow-[0_14px_45px_rgba(61,50,38,0.05)]">
-              <p className="font-serif text-2xl leading-tight text-[#211f1b]">
-                Today: answers.
-                <br />
-                Tomorrow: your care plan.
-              </p>
-
-              <p className="mt-3 text-sm leading-6 text-[#655d52]">
-                Willa starts with guides, then helps mothers turn what they
-                learn into real support.
-              </p>
-            </div>
           </div>
 
           <div>
-            <div className="hidden gap-8 lg:grid lg:grid-cols-4">
+            <div className="hidden gap-8 lg:grid lg:grid-cols-3">
               {footerSections.map((section) => (
                 <FooterSectionBlock key={section.title} section={section} />
               ))}
@@ -176,27 +155,6 @@ export default function SiteFooter() {
               substitute for medical advice, diagnosis, treatment, emergency
               support, or care from a qualified professional.
             </p>
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-[#6d6459]">
-            <Link href="/privacy" className="transition hover:text-[#211f1b]">
-              Privacy
-            </Link>
-
-            <Link href="/terms" className="transition hover:text-[#211f1b]">
-              Terms
-            </Link>
-
-            <Link href="/cookies" className="transition hover:text-[#211f1b]">
-              Cookies
-            </Link>
-
-            <Link
-              href="/disclaimer"
-              className="transition hover:text-[#211f1b]"
-            >
-              Disclaimer
-            </Link>
           </div>
         </div>
       </div>
