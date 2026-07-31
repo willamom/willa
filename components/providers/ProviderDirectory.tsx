@@ -319,8 +319,8 @@ export default function ProviderDirectory({
               className={[
                 'col-span-2 rounded-full px-4 py-2 text-sm font-semibold transition sm:col-span-1',
                 useMapArea
-                  ? 'bg-[#4f5d3d] text-white'
-                  : 'bg-white text-[#4f5d3d] hover:text-[#211f1b]',
+                  ? 'bg-[#4f5d3d] text-white shadow-sm'
+                  : 'bg-white text-[#4f5d3d] hover:bg-[#eef3e6] hover:text-[#211f1b]',
               ].join(' ')}
             >
               {useMapArea ? 'Showing map area' : 'Search map area'}
@@ -330,7 +330,7 @@ export default function ProviderDirectory({
               type="button"
               onClick={handleUseMyLocation}
               disabled={geoLoading}
-              className="col-span-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#4f5d3d] transition hover:text-[#211f1b] disabled:opacity-50 sm:col-span-1"
+              className="col-span-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#4f5d3d] transition hover:bg-[#eef3e6] hover:text-[#211f1b] disabled:opacity-50 sm:col-span-1"
             >
               {geoLoading ? 'Locating...' : 'Use my location'}
             </button>
@@ -339,7 +339,7 @@ export default function ProviderDirectory({
               <button
                 type="button"
                 onClick={resetFilters}
-                className="col-span-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#a45f51] transition hover:text-[#211f1b] sm:col-span-1"
+                className="col-span-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#a45f51] transition hover:bg-[#f5ded5] hover:text-[#211f1b] sm:col-span-1"
               >
                 Reset
               </button>
@@ -449,7 +449,7 @@ function CategoryPill({
         'whitespace-nowrap rounded-full px-3.5 py-2 text-xs font-semibold transition sm:text-sm',
         active
           ? 'bg-[#4f5d3d] text-white shadow-sm'
-          : 'bg-white text-[#655d52] hover:bg-[#fbf7ef] hover:text-[#211f1b]',
+          : 'bg-white text-[#655d52] hover:bg-[#eef3e6] hover:text-[#4f5d3d]',
       ].join(' ')}
     >
       {label}
@@ -502,7 +502,7 @@ function ProviderListCard({
     <button
       type="button"
       onClick={onClick}
-      className="group w-full min-w-0 px-1 py-5 text-left transition hover:bg-white/45 sm:px-3"
+      className="group w-full min-w-0 rounded-[1.25rem] px-1 py-5 text-left transition hover:bg-[#f8f3eb] sm:px-3"
     >
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full bg-[#f5ded5] px-2.5 py-1 text-[0.68rem] font-semibold text-[#a45f51]">
