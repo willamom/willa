@@ -35,6 +35,7 @@ import {
 } from 'lucide-react'
 
 import { createClient } from '@/lib/supabase/client'
+import { siteConfig } from '@/lib/site'
 
 type Audience = 'mom' | 'provider'
 
@@ -360,49 +361,62 @@ export default function ComingSoonWaitlist({
               <X className="h-4 w-4" strokeWidth={1.8} />
             </button>
 
-            <div className="mx-auto max-w-xl text-center">
-              <p className="font-serif text-4xl font-semibold tracking-tight text-[#39472c]">
-                willa
-              </p>
+            {successMessage ? null : (
+              <div className="mx-auto max-w-xl text-center">
+                <p className="font-serif text-4xl font-semibold tracking-tight text-[#39472c]">
+                  willa
+                </p>
 
-              <h2 className="mt-6 font-serif text-4xl leading-tight text-[#211f1b] sm:text-5xl">
-                {audience === 'mom'
-                  ? 'Find your Willa starting point'
-                  : 'Join the provider list'}
-              </h2>
+                <h2 className="mt-6 font-serif text-4xl leading-tight text-[#211f1b] sm:text-5xl">
+                  {audience === 'mom'
+                    ? 'Find your Willa starting point'
+                    : 'Join the provider list'}
+                </h2>
 
-              <p className="mt-4 text-base leading-7 text-[#655d52]">
-                {audience === 'mom'
-                  ? 'Tell us where you are, what feels loud right now, and what kind of support would actually help.'
-                  : 'Tell us a little about your work so we can keep you in the loop as Willa grows.'}
-              </p>
+                <p className="mt-4 text-base leading-7 text-[#655d52]">
+                  {audience === 'mom'
+                    ? 'Tell us where you are, what feels loud right now, and what kind of support would actually help.'
+                    : 'Tell us a little about your work so we can keep you in the loop as Willa grows.'}
+                </p>
 
-              <div className="mx-auto mt-7 flex max-w-md items-center gap-4">
-                <span className="h-px flex-1 bg-[#e8ded1]" />
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#c09a8c] shadow-sm">
-                  <Leaf className="h-4 w-4" strokeWidth={1.7} />
-                </span>
-                <span className="h-px flex-1 bg-[#e8ded1]" />
+                <div className="mx-auto mt-7 flex max-w-md items-center gap-4">
+                  <span className="h-px flex-1 bg-[#e8ded1]" />
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-[#c09a8c] shadow-sm">
+                    <Leaf className="h-4 w-4" strokeWidth={1.7} />
+                  </span>
+                  <span className="h-px flex-1 bg-[#e8ded1]" />
+                </div>
               </div>
-            </div>
+            )}
 
             {successMessage ? (
-              <div className="mt-8 rounded-[1.75rem] border border-[#d9e2cf] bg-white/80 p-6 text-center shadow-[0_14px_45px_rgba(61,50,38,0.05)]">
-                <p className="font-serif text-3xl text-[#211f1b]">
-                  Thank you.
+              <div className="py-12 text-center sm:py-16">
+                <p className="mx-auto max-w-lg font-serif text-4xl leading-tight text-[#211f1b] sm:text-5xl">
+                  Thank you. You’re on the list.
                 </p>
 
-                <p className="mt-3 text-sm leading-6 text-[#655d52]">
-                  You’re on the list.
+                <p className="mx-auto mt-4 max-w-md text-base leading-7 text-[#655d52]">
+                  We’ll let you know as soon as the doors open.
                 </p>
 
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="mt-6 rounded-xl bg-[#4f5d3d] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#414d31]"
-                >
-                  Close
-                </button>
+                <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row sm:justify-center">
+                  <a
+                    href={siteConfig.social.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center rounded-full bg-[#4f5d3d] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#414d31]"
+                  >
+                    Follow Willa on Instagram
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className="inline-flex items-center justify-center rounded-full border border-[#d8cabb] bg-white/70 px-7 py-3.5 text-sm font-semibold text-[#211f1b] transition hover:bg-white"
+                  >
+                    Continue browsing
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
