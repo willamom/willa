@@ -68,7 +68,7 @@ export default function ClosedBetaModal({
           Already 1,000+ parents have joined the waitlist.
         </p>
 
-        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#8a8277]">
+        <p className="mt-4 text-sm italic text-[#8a8277]">
           Already on the list? Thank you. We can’t wait to welcome you.
         </p>
       </div>
