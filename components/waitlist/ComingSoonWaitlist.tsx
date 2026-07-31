@@ -101,6 +101,7 @@ const businessTypeOptions: BusinessTypeOption[] = [
   { label: 'Doula', Icon: HeartHandshake },
   { label: 'Midwife', Icon: UserRound },
   { label: 'OB/GYN', Icon: Stethoscope },
+  { label: 'Prenatal Imaging / Ultrasound Studio', Icon: Camera },
   { label: 'Childbirth Educator', Icon: BookOpen },
 
   { label: 'Lactation Consultant / IBCLC', Icon: Droplet },
