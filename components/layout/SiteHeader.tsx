@@ -1,12 +1,5 @@
 import Link from 'next/link'
-import {
-  BookOpen,
-  Gift,
-  MapPin,
-  Menu,
-  UserRound,
-  X,
-} from 'lucide-react'
+import { BookOpen, Gift, MapPin, Menu, UserRound, X } from 'lucide-react'
 
 const closedBetaHref = '/?closedBeta=1'
 
@@ -23,7 +16,7 @@ const navLinks = [
   },
   {
     label: 'Registry',
-    href: '/registry',
+    href: closedBetaHref,
     icon: Gift,
   },
   {
@@ -100,7 +93,7 @@ export default function SiteHeader() {
                     <Link
                       key={`${link.label}-${link.href}`}
                       href={link.href}
-                      className="flex items-center gap-3 rounded-[1.1rem] px-3 py-3 text-sm font-semibold text-[#3f3b35] transition hover:bg-[#f8f3eb] hover:text-[#4f5d3d]"
+                      className="flex items-center gap-3 rounded-[1.1rem] px-3 py-3 text-sm font-semibold text-[#3f3b35] transition hover:bg-[#eef3e6] hover:text-[#4f5d3d]"
                     >
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eef0e6] text-[#4f5d3d]">
                         <Icon

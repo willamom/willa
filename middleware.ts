@@ -13,7 +13,6 @@ const closedBetaOpenRoutes = new Set([
 
 const closedBetaOpenPrefixes = [
   '/providers',
-  '/registry',
   '/admin',
   '/api',
   '/auth',
