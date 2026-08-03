@@ -74,13 +74,13 @@ async function requireAdmin() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/')
+    redirect('/login?next=/admin')
   }
 
   const { data, error } = await supabase.rpc('is_willa_admin')
 
   if (error || data !== true) {
-    redirect('/')
+    redirect('/login?next=/admin')
   }
 
   return supabase
