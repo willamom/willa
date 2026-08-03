@@ -27,6 +27,12 @@ export const providerCategories: ProviderCategoryConfig[] = [
     color: '#6d7f91',
   },
   {
+    slug: 'prenatal-imaging',
+    label: 'Prenatal Imaging',
+    description: 'Ultrasound studios, prenatal imaging, and keepsake ultrasound services.',
+    color: '#8b6f47',
+  },
+  {
     slug: 'lactation',
     label: 'Lactation Consultants',
     description: 'Breastfeeding, pumping, latch, and feeding support.',

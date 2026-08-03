@@ -8,8 +8,16 @@ import type { ProviderCategory, WillaProvider } from '@/types/providers'
 
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
-const DEFAULT_PROVIDER_CENTER: [number, number] = [-117.1611, 32.7157]
-const DEFAULT_PROVIDER_ZOOM = 10.5
+const DEFAULT_PROVIDER_CENTER: [number, number] = [-98.5795, 39.8283]
+const DEFAULT_PROVIDER_ZOOM = 3.45
+const MIN_PROVIDER_ZOOM = 3.1
+const MAX_PROVIDER_ZOOM = 15
+
+const PROVIDER_MAP_BOUNDS: mapboxgl.LngLatBoundsLike = [
+  [-128, 23],
+  [-65, 51],
+]
+
 const DEFAULT_SELECTED_SPECIALTIES: string[] = []
 
 if (mapboxToken) {
@@ -231,7 +239,14 @@ export default function ProviderMap({
         container: containerRef.current,
         style: 'mapbox://styles/mapbox/light-v11',
         center: initialCenterRef.current,
-        zoom: initialZoomRef.current,
+        zoom: Math.max(initialZoomRef.current, MIN_PROVIDER_ZOOM),
+        minZoom: MIN_PROVIDER_ZOOM,
+        maxZoom: MAX_PROVIDER_ZOOM,
+        maxBounds: PROVIDER_MAP_BOUNDS,
+        renderWorldCopies: false,
+        projection: {
+          name: 'mercator',
+        },
       })
     } catch {
       window.setTimeout(() => setMapUnavailable(true), 0)
@@ -239,6 +254,11 @@ export default function ProviderMap({
     }
 
     mapRef.current = map
+
+    map.setRenderWorldCopies(false)
+    map.setMaxBounds(PROVIDER_MAP_BOUNDS)
+    map.setMinZoom(MIN_PROVIDER_ZOOM)
+    map.setMaxZoom(MAX_PROVIDER_ZOOM)
 
     map.addControl(
       new mapboxgl.NavigationControl({

@@ -9,6 +9,9 @@ const closedBetaOpenRoutes = new Set([
   '/terms',
   '/cookies',
   '/disclaimer',
+  '/login',
+  '/signin',
+  '/sign-in',
 ])
 
 const closedBetaOpenPrefixes = [
@@ -16,6 +19,9 @@ const closedBetaOpenPrefixes = [
   '/admin',
   '/api',
   '/auth',
+  '/login',
+  '/signin',
+  '/sign-in',
   '/_next',
   '/images',
   '/icons',

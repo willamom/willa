@@ -2,6 +2,7 @@ export type ProviderCategory =
   | 'doula'
   | 'midwife'
   | 'obgyn'
+  | 'prenatal-imaging'
   | 'lactation'
   | 'postpartum-care'
   | 'mental-health'

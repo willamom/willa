@@ -17,6 +17,7 @@ import { getProviderCategoryConfig } from '@/data/providers/categories'
 import { getProviderBySlug, getPublishedProviders } from '@/lib/providers'
 import { siteConfig } from '@/lib/site'
 import type { WillaProvider } from '@/types/providers'
+import ProviderInquiryButton from '@/components/providers/ProviderInquiryButton'
 
 type ProviderPageProps = {
   params: Promise<{
@@ -182,7 +183,6 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
           }
         : undefined,
     telephone: provider.phone,
-    email: provider.email,
     sameAs: [provider.website, instagramUrl].filter(Boolean),
   }
 
@@ -236,7 +236,7 @@ export default async function ProviderPage({ params }: ProviderPageProps) {
               {provider.specialties.length > 0 ? (
                 <section className="rounded-[2rem] border border-[#e2d7c8] bg-white p-6 shadow-[0_20px_70px_rgba(61,50,38,0.07)] sm:p-8">
                   <h2 className="font-serif text-3xl text-[#211f1b]">
-                    Support offered
+                    Services
                   </h2>
 
                   <div className="mt-5 flex flex-wrap gap-2">
@@ -307,8 +307,10 @@ function ProviderHero({
   imageUrl: string | null
   locationLabel: string
 }) {
+  const hasImage = Boolean(imageUrl)
+
   return (
-    <section className="mt-8 overflow-hidden rounded-[2.25rem] bg-[#34312c] shadow-[0_24px_80px_rgba(61,50,38,0.12)]">
+    <section className="mt-8 overflow-hidden rounded-[2.25rem] bg-[#eadfd4] shadow-[0_22px_70px_rgba(61,50,38,0.09)]">
       <div className="relative min-h-[26rem] overflow-hidden">
         {imageUrl ? (
           <div
@@ -322,40 +324,78 @@ function ProviderHero({
             className="absolute inset-0"
             style={{
               background:
-                'radial-gradient(circle at 25% 25%, rgba(251,247,239,0.25), transparent 32%), linear-gradient(135deg, #4f5d3d 0%, #a45f51 100%)',
+                 'radial-gradient(circle at 16% 18%, rgba(251,247,239,0.82), transparent 34%), radial-gradient(circle at 82% 18%, rgba(240,196,183,0.82), transparent 36%), radial-gradient(circle at 74% 82%, rgba(211,184,156,0.42), transparent 34%), linear-gradient(135deg, #efe3d5 0%, #dfe5d2 42%, #f0c9bd 100%)',
             }}
           />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" />
+        {hasImage ? (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#211f1b]/58 via-[#211f1b]/18 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#211f1b]/30 via-transparent to-transparent" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#fbf7ef]/42 via-[#fbf7ef]/8 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#fbf7ef]/36 via-transparent to-[#fbf7ef]/10" />
+          </>
+        )}
 
-        <div className="relative z-10 flex min-h-[26rem] flex-col justify-end p-6 text-white sm:p-8 lg:p-10">
+        <div
+          className={`relative z-10 flex min-h-[26rem] flex-col justify-end p-6 sm:p-8 lg:p-10 ${
+            hasImage ? 'text-white' : 'text-[#211f1b]'
+          }`}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <span
               className="h-3 w-3 rounded-full"
               style={{ backgroundColor: categoryColor }}
             />
 
-            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md">
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] backdrop-blur-md ${
+                hasImage
+                  ? 'bg-white/18 text-white'
+                  : 'bg-white/70 text-[#4f5d3d]'
+              }`}
+            >
               {categoryLabel}
             </span>
 
             {provider.isVerified ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-md ${
+                  hasImage
+                    ? 'bg-white/18 text-white'
+                    : 'bg-[#eef0e6] text-[#4f5d3d]'
+                }`}
+              >
                 <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
                 Verified
               </span>
             ) : null}
 
             {provider.isClaimed ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-[#4f5d3d] backdrop-blur-md">
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-md ${
+                  hasImage
+                    ? 'bg-white/90 text-[#4f5d3d]'
+                    : 'bg-white/78 text-[#4f5d3d]'
+                }`}
+              >
                 <ShieldCheck className="h-3.5 w-3.5" strokeWidth={2} />
                 Claimed profile
               </span>
             ) : null}
 
             {provider.isFeatured ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-semibold backdrop-blur-md ${
+                  hasImage
+                    ? 'bg-white/18 text-white'
+                    : 'bg-[#f5ded5] text-[#a45f51]'
+                }`}
+              >
                 <Star className="h-3.5 w-3.5 fill-current" strokeWidth={2} />
                 Featured
               </span>
@@ -366,13 +406,21 @@ function ProviderHero({
             {provider.name}
           </h1>
 
-          <div className="mt-5 flex items-center gap-2 text-sm text-white/85">
+          <div
+            className={`mt-5 flex items-center gap-2 text-sm ${
+              hasImage ? 'text-white/86' : 'text-[#655d52]'
+            }`}
+          >
             <MapPin className="h-4 w-4" strokeWidth={1.8} />
 
             <span>{locationLabel}</span>
           </div>
 
-          <p className="mt-6 max-w-3xl text-base leading-7 text-white/85 sm:text-lg">
+          <p
+            className={`mt-6 max-w-3xl text-base leading-7 sm:text-lg ${
+              hasImage ? 'text-white/86' : 'text-[#5f574d]'
+            }`}
+          >
             {provider.description}
           </p>
 
@@ -382,7 +430,11 @@ function ProviderHero({
                 href={provider.website}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#211f1b] transition hover:bg-[#fbf7ef]"
+                className={`inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition ${
+                  hasImage
+                    ? 'bg-white text-[#211f1b] hover:bg-[#fbf7ef]'
+                    : 'bg-[#4f5d3d] text-white hover:bg-[#414d31]'
+                }`}
               >
                 Visit website
                 <ExternalLink className="h-4 w-4" strokeWidth={1.8} />
@@ -390,12 +442,14 @@ function ProviderHero({
             ) : null}
 
             {provider.email ? (
-              <a
-                href={`mailto:${provider.email}`}
-                className="inline-flex items-center justify-center rounded-full bg-white/15 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/25"
-              >
-                Email provider
-              </a>
+              <ProviderInquiryButton
+                provider={provider}
+                className={`inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition ${
+                  hasImage
+                    ? 'bg-white/18 text-white backdrop-blur-md hover:bg-white/28'
+                    : 'bg-white/78 text-[#4f5d3d] shadow-sm hover:bg-[#eef3e6] hover:text-[#211f1b]'
+                }`}
+              />
             ) : null}
           </div>
         </div>
